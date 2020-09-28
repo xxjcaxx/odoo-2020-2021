@@ -1,0 +1,57 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+<!--
+    <record model="ir.ui.view" id="school.list">
+      <field name="name">school list</field>
+      <field name="model">school.school</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+-->
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="school.course_action_window">
+      <field name="name">school course window</field>
+      <field name="res_model">school.course</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="school.action_server">
+      <field name="name">school server</field>
+      <field name="model_id" ref="model_school_school"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+
+    <menuitem name="School" id="school.menu_root"/>
+
+    <!-- menu categories -->
+
+    <menuitem name="Management" id="school.menu_management" parent="school.menu_root"/>
+
+    <!-- actions -->
+
+    <menuitem name="Courses" id="school.menu_1_list" parent="school.menu_management"
+              action="school.course_action_window"/>
+
+  </data>
+</odoo>
