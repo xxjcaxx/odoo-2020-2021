@@ -10,6 +10,8 @@
           <field name="name"/>
           <field name="date"/>
           <field name="done"/>
+          <field name="priority"/>
+          <field name="student"/>
         </tree>
       </field>
     </record>
@@ -21,9 +23,13 @@
         <form>
           <sheet>
             <group>
-          <field name="name"/>
-          <field name="date"/>
-          <field name="done"/>
+              <field name="photo" widget="image"/>
+              <field name="name"/>
+              <field name="date"/>
+              <field name="done"/>
+              <field name="priority"/>
+              <field name="student"/>
+              <field name="group"/>
             </group>
           </sheet>
         </form>
@@ -37,23 +43,28 @@
       <field name="res_model">tasks.task</field>
       <field name="view_mode">tree,form</field>
     </record>
+    <record model="ir.actions.act_window" id="tasks.student_action_window">
+      <field name="name">students window</field>
+      <field name="res_model">tasks.student</field>
+      <field name="view_mode">tree,form</field>
+    </record>
 
 
     <!-- server action to the one above -->
-<!--
-    <record model="ir.actions.server" id="tasks.action_server">
-      <field name="name">tasks server</field>
-      <field name="model_id" ref="model_tasks_tasks"/>
-      <field name="state">code</field>
-      <field name="code">
-        action = {
-          "type": "ir.actions.act_window",
-          "view_mode": "tree,form",
-          "res_model": model._name,
-        }
-      </field>
-    </record>
--->
+    <!--
+        <record model="ir.actions.server" id="tasks.action_server">
+          <field name="name">tasks server</field>
+          <field name="model_id" ref="model_tasks_tasks"/>
+          <field name="state">code</field>
+          <field name="code">
+            action = {
+              "type": "ir.actions.act_window",
+              "view_mode": "tree,form",
+              "res_model": model._name,
+            }
+          </field>
+        </record>
+    -->
 
     <!-- Top menu item -->
 
@@ -67,6 +78,8 @@
 
     <menuitem name="Tasks" id="tasks.menu_1_tasks" parent="tasks.menu_1"
               action="tasks.task_action_window"/>
+    <menuitem name="Students" id="tasks.menu_2_students" parent="tasks.menu_1"
+              action="tasks.student_action_window"/>
 
   </data>
 </odoo>
