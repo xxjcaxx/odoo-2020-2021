@@ -30,6 +30,7 @@
               <field name="priority"/>
               <field name="student"/>
               <field name="group"/>
+              <field name="cor_group"/>
             </group>
           </sheet>
         </form>
