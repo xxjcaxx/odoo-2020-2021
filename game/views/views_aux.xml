@@ -1,0 +1,393 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="game.cost_list">
+      <field name="name">cost list</field>
+      <field name="model">game.cost</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="resource"/>
+          <field name="level"/>
+          <field name="raw"/>
+          <field name="cost"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="game.cost_form">
+      <field name="name">cost form</field>
+      <field name="model">game.cost</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="name"/>
+              <field name="resource"/>
+              <field name="level"/>
+              <field name="raw"/>
+              <field name="cost"/>
+            </group></sheet></form>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="game.cost_action_window">
+      <field name="name">cost window</field>
+      <field name="res_model">game.cost</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="game.raws_list">
+      <field name="name">raw list</field>
+      <field name="model">game.raws</field>
+      <field name="arch" type="xml">
+        <tree decoration-danger="quantity&lt;5" decoration-warning="total_production&lt;=0">
+          <field name="name"/>
+          <field name="player"/><field name="clan"/>
+          <field name="raw"/>
+          <field name="quantity"/>
+          <field name="production"/><field name="character_production"/>
+
+          <field name="total_production"/><field name="production_cost"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="game.raws_form">
+      <field name="name">raw form</field>
+      <field name="model">game.raws</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="name"/>
+              <field name="player"/><field name="clan"/>
+              <field name="raw"/>
+              <field name="quantity"/>
+              <field name="production"/><field name="character_production"/>
+
+              <field name="total_production"/><field name="production_cost"/>
+            </group></sheet></form>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="game.raws_action_window">
+      <field name="name">raws window</field>
+      <field name="res_model">game.raws</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <record model="ir.ui.view" id="game.raws_resource_list">
+      <field name="name">raw list</field>
+      <field name="model">game.raws_resource</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="resource"/> <field name="player"/>
+          <field name="raw"/>
+          <field name="quantity"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="game.duration_action_window">
+      <field name="name">durations window</field>
+      <field name="res_model">game.duration</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="game.character_list">
+      <field name="name">character tree</field>
+      <field name="model">game.character</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/><field name="player"/>
+          <field name="fortress"/>
+          <field name="science"/><field name="construction"/>
+          <field name="mining"/><field name="war"/><field name="age"/>
+          <field name="health"/><field name="resource"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="game.character_form">
+      <field name="name">character form</field>
+      <field name="model">game.character</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <group>
+                <field name="name"/>
+                <field name="image" widget="image"/>
+                <field name="fortress"/>
+                <field name="player"/>
+              </group>
+              <group>
+                <field name="science"/><field name="construction"/>
+                <field name="mining"/><field name="war"/>
+                <field name="health"/><field name="age"/>
+                <field name="gun_power"/><field name="melee_power"/><field name="armor_power"/>
+              </group>
+            </group>
+            <notebook><page string="Resources">
+              <group>
+                <field name="resources_available" attrs="{'invisible': [('resource', '!=', False)]}">
+                  <tree>
+                    <field name="image" widget="image"/>
+                    <field name="name"/>
+                    <button name="assign_to_resource" string="Assign" type="object"
+                            context="{'character':parent.id}"/>
+                  </tree>
+                </field>
+                <field name="resource" attrs="{'readonly': [('fortress', '=', False)]}"  domain="[('fortress', '=', fortress)]"/>
+              </group>
+            </page><page string="Stuff">
+              <group>
+                <field name="stuff">
+                  <tree>
+                    <field name="name"/>
+
+                    <field name="type"/>
+                    <field name="melee"/>
+                    <field name="shoot"/>
+                    <field name="armor"/>
+                    <field name="science"/>
+                    <field name="cook"/>
+                    <field name="medicine"/>
+                    <field name="energy"/>
+                    <button name="take_away" string="Take Allay" type="object"
+                            context="{'character':parent.id}"/>
+                  </tree>
+                </field>
+                <field name="guns">
+                  <tree>
+                    <field name="name"/>
+
+                    <field name="shoot"/>
+                    <button name="take_away" string="Take Allay" type="object"
+                            context="{'character':parent.id}"/>
+                  </tree>
+                </field>
+                <field name="armors">
+                  <tree>
+                    <field name="name"/>
+
+
+                    <field name="armor"/>
+                    <button name="take_away" string="Take Away" type="object"
+                            context="{'character':parent.id}"/>
+                  </tree>
+                </field>
+                <field name="melees">
+                  <tree>
+                    <field name="name"/>
+
+                    <field name="melee"/>
+                    <button name="take_away" string="Take Allay" type="object"
+                            context="{'character':parent.id}"/>
+                  </tree>
+                </field>
+              </group>
+            </page></notebook>
+          </sheet></form>
+      </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="game.character_kanban">
+      <field name="name">character kanban</field>
+      <field name="model">game.character</field>
+      <field name="arch" type="xml">
+        <kanban>
+          <field name="name"/><field name="id"/>
+          <field name="image" widget="image"/>
+          <field name="fortress"/>
+          <field name="science"/><field name="construction"/>
+          <field name="mining"/><field name="war"/>
+          <field name="health"/><field name="age"/>
+          <field name="resource"/><field name="stuff"/>
+          <field name="unemployed"/>
+          <templates>
+            <t t-name="kanban-box">
+              <div  t-attf-class="
+                            oe_kanban_card
+                            oe_kanban_global_click
+                            o_kanban_record_has_image_fill
+                            oe_game_kanban_background_#{record.unemployed.raw_value}
+                           " >
+                <div class="oe_game_kanban_div_image">
+                  <img class="oe_kanban_image oe_character_kanban_image"
+                       t-att-alt="record.name.value"
+                       t-att-src="kanban_image('game.character', 'image', record.id.value)"/>
+                </div>
+
+                <div class="oe_kanban_details oe_game_kanban_dropdown">
+                  <a type="open"> <h4><field name="name"/></h4>  </a>
+                  <p>Fortress: <field name="fortress"/> Building: <field name="resource"/></p>
+                  <div class=".oe_game_attr_list oe_game_kanban_dropdown-content">
+                    <ul>
+                      <li>Science: <field name="science"/></li>
+                      <li>War: <field name="war"/></li>
+                      <li>Construction: <field name="construction"/></li>
+                      <li>Mining: <field name="mining"/></li>
+                      <li>Health: <field name="health"/></li>
+                      <li>Age: <field name="age"/></li>
+                    </ul>
+                  </div>
+                  <field name="stuff" attrs="{'invisible':[('stuff', '==', [])]}"/>
+                </div>
+
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="game.character_action_window">
+      <field name="name">characters window</field>
+      <field name="res_model">game.character</field>
+      <field name="view_mode">kanban,tree,form</field>
+      <field name="domain"></field>
+      <field name="context">{'search_default_alive':1}</field>
+    </record>
+
+    <record id="game.action_server_resurrect" model="ir.actions.server">
+      <field name="name">Resurect</field>
+      <field name="type">ir.actions.server</field>
+      <field name="model_id" ref="model_game_character" />
+      <field name="binding_model_id" ref="model_game_character" />
+      <field name="state">code</field>
+      <field name="code">model.action_resurrect()</field>
+    </record>
+
+
+
+    <record model="ir.ui.view" id="game.research_list">
+      <field name="name">research tree</field>
+      <field name="model">game.research</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="resource"/>
+          <field name="type"/>
+          <field name="minutes_left"/>
+          <field name="research_percent" widget="progressbar"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="game.research_action_window">
+      <field name="name">research window</field>
+      <field name="res_model">game.research</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <record model="ir.ui.view" id="game.log_list">
+      <field name="name">log tree</field>
+      <field name="model">game.log</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/> <field name="title"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="game.log_form">
+      <field name="name">log form</field>
+      <field name="model">game.log</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet><group>
+            <field name="name"/> <field name="title"/> <field name="description"/>
+          </group> </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="game.log_action_window">
+      <field name="name">log window</field>
+      <field name="res_model">game.log</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.ui.view" id="game.points_graph">
+      <field name="name">points graph</field>
+      <field name="model">game.points</field>
+      <field name="arch" type="xml">
+        <graph string="Points History" type="line">
+          <field name="date"  type="row"/>
+           <field name="player"  type="col"/>
+          <field name="points" type="measure"/>
+        </graph>
+
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="game.points_tree">
+      <field name="name">points tree</field>
+      <field name="model">game.points</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="player"/>
+          <field name="date"/>
+          <field name="points"/>
+        </tree>
+
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="game.points_action_window">
+      <field name="name">points graph</field>
+      <field name="res_model">game.points</field>
+      <field name="view_mode">tree,graph,form</field>
+    </record>
+
+      <record model="ir.ui.view" id="game.group_form">
+      <field name="name">group form</field>
+      <field name="model">game.group</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet><group>
+            <field name="name"/>
+            <field name="player"/>
+            <field name="leader"/>
+            <field name="members"/>
+            <field name="subgroups"/>
+
+          </group> </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="game.group_action_window">
+      <field name="name">group window</field>
+      <field name="res_model">game.group</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{'default_is_player': True}</field>
+    </record>
+
+
+
+    <menuitem name="Cost" id="game.menu_cost" parent="game.menu_1"
+              action="game.cost_action_window"/>
+    <menuitem name="Raws" id="game.menu_raws" parent="game.menu_1"
+              action="game.raws_action_window"/>
+    <menuitem name="Duration" id="game.menu_duration" parent="game.menu_1"
+              action="game.duration_action_window"/>
+    <menuitem name="Characters" id="game.menu_character" parent="game.menu_1"
+              action="game.character_action_window"/>
+    <menuitem name="Researches" id="game.menu_research" parent="game.menu_1"
+              action="game.research_action_window"/>
+    <menuitem name="Logs" id="game.menu_log" parent="game.menu_1"
+              action="game.log_action_window"/>
+
+    <menuitem name="Points" id="game.menu_points" parent="game.menu_1"
+              action="game.points_action_window"/>
+    <menuitem name="Groups" id="game.menu_group" parent="game.menu_1"
+              action="game.group_action_window"/>
+
+  </data>
+</odoo>

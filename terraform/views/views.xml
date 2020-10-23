@@ -1,0 +1,47 @@
+<odoo>
+  <data>
+       <record model="ir.ui.view" id="terraform.settings_form">
+            <field name="name">settings Form</field>
+            <field name="model">terraform.settings</field>
+            <field name="arch" type="xml">
+                <form string="settings">
+                    <sheet>
+                        <group string="General Settings">
+
+                            <field name="name"/>
+                              <button name="generate_universe" type="object" string="Generate Universe" class="oe_highlight" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    
+    
+   <record model="ir.actions.act_window" id="terraform.settings_action_window">
+      <field name="name">Settings</field>
+      <field name="res_model">terraform.settings</field>
+      <field name="view_mode">tree,form,kanban</field>
+    </record>
+        <record model="ir.actions.act_window" id="terraform.templates_action_window">
+      <field name="name">Settings</field>
+      <field name="res_model">terraform.template</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Top menu item -->
+
+    <menuitem name="Terraform" id="terraform.menu_root"/>
+
+    <!-- menu categories -->
+
+    <menuitem name="Game Management" id="terraform.menu_1" parent="terraform.menu_root"/>
+    <menuitem name="Aux Models" id="terraform.menu_2" parent="terraform.menu_root"/>
+
+        <menuitem name="Settings" id="terraform.menu_settings" parent="terraform.menu_2"
+              action="terraform.settings_action_window"/>
+   <menuitem name="Templates" id="terraform.menu_templates" parent="terraform.menu_2"
+              action="terraform.templates_action_window"/>
+
+  </data>
+</odoo>

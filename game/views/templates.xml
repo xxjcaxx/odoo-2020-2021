@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+
+<template id="game.assets_backend" name="game assets" inherit_id="web.assets_backend">
+    <xpath expr="//script[last()]" position="after">
+	    <link rel="stylesheet" href="/game/static/src/css/styles.css"/>
+    </xpath>
+</template>
+
+
+    </data>
+</odoo>

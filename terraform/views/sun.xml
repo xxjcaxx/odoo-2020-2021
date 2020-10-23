@@ -1,0 +1,47 @@
+<odoo>
+  <data>
+           <record model="ir.ui.view" id="terraform.sun_tree">
+            <field name="name">sun tree</field>
+            <field name="model">terraform.sun</field>
+            <field name="arch" type="xml">
+                <tree>
+                            <field name="name"/>
+                             <field name="coordinates"/>
+
+                </tree>
+            </field>
+        </record>
+
+      <record model="ir.ui.view" id="terraform.sun_form">
+            <field name="name">sun Form</field>
+            <field name="model">terraform.sun</field>
+            <field name="arch" type="xml">
+                <form string="sun">
+                    <sheet>
+                        <group string="Global Data">
+
+                            <field name="name"/>
+                            <field name="coordinates"/>
+
+                             <field name="planets"/>
+
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+   <record model="ir.actions.act_window" id="terraform.sun_action_window">
+      <field name="name">suns</field>
+      <field name="res_model">terraform.sun</field>
+      <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+      <!-- Menu -->
+
+    <menuitem name="Suns" id="terraform.menu_suns" parent="terraform.menu_1"
+              action="terraform.sun_action_window"/>
+
+
+  </data>
+</odoo>

@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_terraform_player,terraform.player,model_terraform_player,base.group_user,1,1,1,1
+access_terraform_planet,terraform.planet,model_terraform_planet,base.group_user,1,1,1,1
+access_terraform_sun,terraform.sun,model_terraform_sun,base.group_user,1,1,1,1
+access_terraform_settings,terraform.settings,model_terraform_settings,base.group_user,1,1,1,1
+access_terraform_template,terraform.template,model_terraform_template,base.group_user,1,1,1,1
+access_terraform_building,terraform.building,model_terraform_building,base.group_user,1,1,1,1
+access_terraform_building_type,terraform.building_type,model_terraform_building_type,base.group_user,1,1,1,1

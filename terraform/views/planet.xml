@@ -1,0 +1,63 @@
+<odoo>
+  <data>
+           <record model="ir.ui.view" id="terraform.planet_tree">
+            <field name="name">planet tree</field>
+            <field name="model">terraform.planet</field>
+            <field name="arch" type="xml">
+                <tree>
+                            <field name="image_small" widget="image"/>
+                            <field name="name"/>
+                             <field name="player"/>
+                    <field name="n_planet"/>
+                    <field name="sun"/>
+                     <field name="average_temperature"/>
+                             <field name="oxigen"/>
+                             <field name="co2"/>
+                             <field name="gravity"/>
+                             <field name="air_density"/>
+                </tree>
+            </field>
+        </record>
+
+      <record model="ir.ui.view" id="terraform.planet_form">
+            <field name="name">planet Form</field>
+            <field name="model">terraform.planet</field>
+            <field name="arch" type="xml">
+                <form string="Planet">
+                    <sheet>
+                        <group string="Global Data">
+                            <field name="image" widget="image"/>
+                            <field name="name"/>
+                             <field name="player"/>
+                             <field name="n_planet"/>
+                             <field name="sun"/>
+                             <field name="average_temperature"/>
+                             <field name="oxigen"/>
+                             <field name="co2"/>
+                             <field name="gravity"/>
+                             <field name="air_density"/>
+                        </group>
+                              <group string="Buildings">
+
+                            <field name="buildings"/>
+
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+   <record model="ir.actions.act_window" id="terraform.planet_action_window">
+      <field name="name">Planets</field>
+      <field name="res_model">terraform.planet</field>
+      <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+      <!-- Menu -->
+
+    <menuitem name="Planets" id="terraform.menu_planets" parent="terraform.menu_1"
+              action="terraform.planet_action_window"/>
+
+
+  </data>
+</odoo>

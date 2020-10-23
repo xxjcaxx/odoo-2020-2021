@@ -1,0 +1,19 @@
+<odoo>
+  <data>
+
+
+
+   <record model="ir.actions.act_window" id="terraform.building_action_window">
+      <field name="name">buildings</field>
+      <field name="res_model">terraform.building</field>
+      <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+      <!-- Menu -->
+
+    <menuitem name="buildings" id="terraform.menu_buildings" parent="terraform.menu_1"
+              action="terraform.building_action_window"/>
+
+
+  </data>
+</odoo>
