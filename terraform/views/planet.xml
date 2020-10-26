@@ -1,70 +1,90 @@
 <odoo>
-  <data>
-           <record model="ir.ui.view" id="terraform.planet_tree">
+    <data>
+        <record model="ir.ui.view" id="terraform.planet_tree">
             <field name="name">planet tree</field>
             <field name="model">terraform.planet</field>
             <field name="arch" type="xml">
-                <tree>
-                            <field name="image_small" widget="image"/>
-                            <field name="name"/>
-                             <field name="player"/>
+                <tree decoration-danger="average_temperature>50" decoration-info="average_temperature&lt;0">
+                    <field name="image_small" widget="image"/>
+                    <field name="name"/>
+                    <field name="player"/>
                     <field name="n_planet"/>
                     <field name="sun"/>
-                     <field name="average_temperature"/>
-                             <field name="oxigen"/>
-                             <field name="co2"/>
+                    <field name="average_temperature"/>
+                    <field name="oxigen"/>
+                    <field name="co2"/>
                     <field name="water"/>
                     <field name="material"/>
-                     <field name="energy"/>
-                             <field name="gravity"/>
-                             <field name="air_density"/>
+                    <field name="energy"/>
+                    <field name="gravity"/>
+                    <field name="air_density"/>
                 </tree>
             </field>
         </record>
 
-      <record model="ir.ui.view" id="terraform.planet_form">
+        <record model="ir.ui.view" id="terraform.planet_form">
             <field name="name">planet Form</field>
             <field name="model">terraform.planet</field>
             <field name="arch" type="xml">
                 <form string="Planet">
                     <sheet>
+                        <field name="image" widget="image"/>
                         <group string="Global Data">
-                            <field name="image" widget="image"/>
-                            <field name="name"/>
-                             <field name="player"/>
-                             <field name="n_planet"/>
-                             <field name="sun"/>
-                             <field name="average_temperature"/>
-                             <field name="oxigen"/>
-                             <field name="co2"/>
-                            <field name="water"/>
-                            <field name="material"/>
-                            <field name="energy"/>
-                             <field name="gravity"/>
-                             <field name="air_density"/>
+                            <group>
+                                <field name="name"/>
+                                <field name="player"/>
+                                <field name="n_planet"/>
+                                <separator string="Description"/>
+                                <field name="sun"/>
+                                <field name="average_temperature"/>
+                                <field name="oxigen"/>
+                            </group>
+                            <group>
+                                <field name="co2"/>
+                                <field name="water"/>
+                                <field name="material"/>
+                                <field name="energy"/>
+                                <field name="gravity"/>
+                                <field name="air_density"/>
+                            </group>
                         </group>
-                              <group string="Buildings">
-                              <button name="calculate_production" type="object" string="Calculate Production" class="oe_highlight" />
+                        <notebook>
+                            <page string="Buildings">
+                                <field name="buildings"/>
+                                <button name="calculate_production" type="object" string="Calculate Production" class="oe_highlight" />
+                            </page>
+                            <page string="Available Buildings">
+                                <field name="available_buildings">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="max_people"/>
+                                        <field name="energy_production"/>
+                                        <field name="oxigen_production"/>
+                                        <field name="co2_production"/>
+                                        <field name="water_production"/>
+                                        <field name="material"/>
+                                        <field name="time"/>
+                                    </tree>
+                                </field>
+                            </page>
 
-                            <field name="buildings"/>
-
-                        </group>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
         </record>
 
-   <record model="ir.actions.act_window" id="terraform.planet_action_window">
-      <field name="name">Planets</field>
-      <field name="res_model">terraform.planet</field>
-      <field name="view_mode">tree,form,kanban</field>
-    </record>
+        <record model="ir.actions.act_window" id="terraform.planet_action_window">
+            <field name="name">Planets</field>
+            <field name="res_model">terraform.planet</field>
+            <field name="view_mode">tree,form,kanban</field>
+        </record>
 
-      <!-- Menu -->
+        <!-- Menu -->
 
-    <menuitem name="Planets" id="terraform.menu_planets" parent="terraform.menu_1"
-              action="terraform.planet_action_window"/>
+        <menuitem name="Planets" id="terraform.menu_planets" parent="terraform.menu_1"
+                  action="terraform.planet_action_window"/>
 
 
-  </data>
+    </data>
 </odoo>

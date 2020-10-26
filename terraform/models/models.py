@@ -3,6 +3,7 @@
 from odoo import models, fields, api
 import random
 import string
+import json
 
 
 def name_generator():
@@ -60,7 +61,8 @@ class planet(models.Model):
     buildings = fields.One2many('terraform.building','planet')
 
     # Aux fields
-    image_small = fields.Image(max_width=50, max_height=50, related='image', store=True)
+    image_small = fields.Image(max_width=50, max_height=50, related='image', string='Image Small', store=True)
+    available_buildings = fields.Many2many('terraform.building_type',compute='_get_available_buildings')
 
     def calculate_production(self):
         for p in self:
@@ -72,6 +74,24 @@ class planet(models.Model):
                 for b in consumers:
                     b.write({'people':0})
 
+    def filter_building(self,b,p):
+        requirements = json.loads(b.required_enviroment)
+        print(requirements)
+        fit = (float(requirements['min_temp']) <= p.average_temperature < float(requirements['max_temp']) and
+                p.oxigen >= float(requirements['min_oxigen']) and
+                p.co2 >= float(requirements['min_co2']) and
+                p.water >= float(requirements['min_water']) and
+                float(requirements['min_gravity']) <= p.gravity < float(requirements['max_gravity']) and
+                float(requirements['min_air']) <= p.air_density < float(requirements['max_air']))
+        print(fit)
+        return fit
+
+
+    def _get_available_buildings(self):
+        for p in self:
+            a_b = self.env['terraform.building_type'].search([]).filtered(lambda b: self.filter_building(b,p))
+            print(a_b)
+            p.available_buildings = a_b.ids
 
 class sun(models.Model):
     _name = 'terraform.sun'
@@ -121,7 +141,7 @@ class building_type(models.Model):
                                               '"min_water":"1",'
                                               '"min_gravity":"1","max_gravity":"20",'
                                               '"min_air":"0.1","max_air":"10"}')
-    ### falta: requisits planetaris
+
 #https://www.odoo.com/fr_FR/forum/aide-1/question/best-way-to-show-json-data-on-odoo-ui-171100
 
 #####################################3333
