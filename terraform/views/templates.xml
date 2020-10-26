@@ -1,10 +1,10 @@
 <odoo>
     <data>
-<!--
+
         <template id="listing">
-          <ul>
+           <ul>
             <li t-foreach="objects" t-as="object">
-              <a t-attf-href="#{ root }/objects/#{ object.id }">
+              <a t-attf-href="#{ root }/planets/#{ object.id }">
                 <t t-esc="object.display_name"/>
               </a>
             </li>
@@ -18,7 +18,8 @@
               <dd><t t-esc="object[field]"/></dd>
             </t>
           </dl>
+
         </template>
--->
+
     </data>
 </odoo>

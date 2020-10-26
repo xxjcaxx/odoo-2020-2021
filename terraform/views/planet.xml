@@ -13,6 +13,9 @@
                      <field name="average_temperature"/>
                              <field name="oxigen"/>
                              <field name="co2"/>
+                    <field name="water"/>
+                    <field name="material"/>
+                     <field name="energy"/>
                              <field name="gravity"/>
                              <field name="air_density"/>
                 </tree>
@@ -34,10 +37,14 @@
                              <field name="average_temperature"/>
                              <field name="oxigen"/>
                              <field name="co2"/>
+                            <field name="water"/>
+                            <field name="material"/>
+                            <field name="energy"/>
                              <field name="gravity"/>
                              <field name="air_density"/>
                         </group>
                               <group string="Buildings">
+                              <button name="calculate_production" type="object" string="Calculate Production" class="oe_highlight" />
 
                             <field name="buildings"/>
 

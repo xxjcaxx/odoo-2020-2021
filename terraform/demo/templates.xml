@@ -65,6 +65,14 @@
 <field name="name">Life suport system</field>
  <field name="max_people">10</field>
       <field name="material">10000</field>
+      <field name="required_enviroment">{"min_temp":"-200", "max_temp":"600",
+                                              "min_oxigen":"0",
+                                              "min_co2":"0", "min_water":"0",
+                                              "min_gravity":"0","max_gravity":"200",
+                                              "min_air":"0","max_air":"100"}</field>
+      <field name="oxigen_production">0</field>
+      <field name="co2_production">0</field>
+      <field name="water_production">0</field>
         </record>
 
           <record id="terraform.b_type_biosphere" model="terraform.building_type">
@@ -72,6 +80,15 @@
  <field name="max_people">100</field>
               <field name="energy_production">1000</field>
               <field name="material">10000</field>
+                   <field name="required_enviroment">{"min_temp":"-10", "max_temp":"60",
+                                              "min_oxigen":"0",
+                                              "min_co2":"0", "min_water":"60",
+                                              "min_gravity":"1","max_gravity":"15",
+                                              "min_air":"0","max_air":"10"}</field>
+              <field name="oxigen_production">0</field>
+      <field name="co2_production">0</field>
+      <field name="water_production">0</field>
+              <field name="required_buildings" eval="[(6,0,[ref('terraform.b_type_life_support')])]"></field>
         </record>
 
              <record id="terraform.b_type_sun_panel" model="terraform.building_type">
@@ -79,6 +96,16 @@
  <field name="max_people">0</field>
                  <field name="energy_production">1050</field>
                  <field name="material">1000</field>
+                   <field name="required_enviroment">{"min_temp":"-10", "max_temp":"60",
+                                              "min_oxigen":"0",
+                                              "min_co2":"0", "min_water":"0",
+                                              "min_gravity":"1","max_gravity":"150",
+                                              "min_air":"0","max_air":"100"}</field>
+                  <field name="oxigen_production">0</field>
+      <field name="co2_production">0</field>
+      <field name="water_production">0</field>
+                 <field name="required_buildings" eval="[(6,0,[ref('terraform.b_type_life_support')])]"></field>
+
         </record>
 
           <record id="terraform.b_type_nuclear_plant" model="terraform.building_type">
@@ -86,6 +113,136 @@
  <field name="max_people">10</field>
               <field name="energy_production">105000</field>
               <field name="material">70000</field>
+              <field name="required_enviroment">{"min_temp":"-100", "max_temp":"100",
+                                              "min_oxigen":"0",
+                                              "min_co2":"0", "min_water":"10",
+                                              "min_gravity":"1","max_gravity":"150",
+                                              "min_air":"0","max_air":"100"}</field>
+               <field name="oxigen_production">0</field>
+      <field name="co2_production">0</field>
+      <field name="water_production">0</field>
+              <field name="required_buildings" eval="[(6,0,[ref('terraform.b_type_life_support')])]"></field>
+
+        </record>
+
+        <record id="terraform.b_type_oxigen_generator" model="terraform.building_type">
+<field name="name">Oxigen Generator</field>
+ <field name="max_people">1</field>
+              <field name="energy_production">-1000</field>
+              <field name="material">7000</field>
+              <field name="required_enviroment">{"min_temp":"-10", "max_temp":"50",
+                                              "min_oxigen":"0",
+                                              "min_co2":"10", "min_water":"10",
+                                              "min_gravity":"1","max_gravity":"150",
+                                              "min_air":"0.1","max_air":"10"}</field>
+             <field name="oxigen_production">0.001</field>
+      <field name="co2_production">-0.0001</field>
+      <field name="water_production">0</field>
+                          <field name="required_buildings" eval="[(6,0,[ref('terraform.b_type_life_support')])]"></field>
+        </record>
+
+                <record id="terraform.b_type_co2_generator" model="terraform.building_type">
+<field name="name">co2 Generator</field>
+ <field name="max_people">1</field>
+              <field name="energy_production">100</field>
+              <field name="material">7000</field>
+              <field name="required_enviroment">{"min_temp":"-10", "max_temp":"80",
+                                              "min_oxigen":"50",
+                                              "min_co2":"0", "min_water":"1",
+                                              "min_gravity":"1","max_gravity":"150",
+                                              "min_air":"0.1","max_air":"10"}</field>
+                     <field name="oxigen_production">-0.001</field>
+      <field name="co2_production">0.001</field>
+      <field name="water_production">0</field>
+                                  <field name="required_buildings" eval="[(6,0,[ref('terraform.b_type_life_support')])]"></field>
+
+        </record>
+
+              <record id="terraform.b_type_water_well" model="terraform.building_type">
+<field name="name">Water Well</field>
+ <field name="max_people">1</field>
+              <field name="energy_production">-1000</field>
+              <field name="material">7000</field>
+              <field name="required_enviroment">{"min_temp":"0", "max_temp":"80",
+                                              "min_oxigen":"0",
+                                              "min_co2":"0", "min_water":"10",
+                                              "min_gravity":"1","max_gravity":"15",
+                                              "min_air":"0.1","max_air":"10"}</field>
+                   <field name="oxigen_production">0</field>
+      <field name="co2_production">0</field>
+      <field name="water_production">0.001</field>
+                                <field name="required_buildings" eval="[(6,0,[ref('terraform.b_type_life_support')])]"></field>
+
+        </record>
+
+            <record id="terraform.b_type_water_generator" model="terraform.building_type">
+<field name="name">Water Generator</field>
+ <field name="max_people">1</field>
+              <field name="energy_production">-10000</field>
+              <field name="material">7000</field>
+              <field name="required_enviroment">{"min_temp":"0", "max_temp":"80",
+                                              "min_oxigen":"50",
+                                              "min_co2":"0",
+                                             "min_water":"0",
+                                              "min_gravity":"1","max_gravity":"15",
+                                              "min_air":"0.1","max_air":"10"}</field>
+                 <field name="oxigen_production">-0.0001</field>
+      <field name="co2_production">0</field>
+      <field name="water_production">0.0001</field>
+                              <field name="required_buildings" eval="[(6,0,[ref('terraform.b_type_life_support')])]"></field>
+
+        </record>
+
+        <record id="terraform.b_type_seed_planter" model="terraform.building_type">
+<field name="name">Seed Planter</field>
+ <field name="max_people">1</field>
+              <field name="energy_production">-100</field>
+              <field name="material">7000</field>
+              <field name="required_enviroment">{"min_temp":"0", "max_temp":"40",
+                                              "min_oxigen":"50",
+                                              "min_co2":"50",
+                                             "min_water":"30",
+                                              "min_gravity":"1","max_gravity":"15",
+                                              "min_air":"0.5","max_air":"5"}</field>
+             <field name="oxigen_production">-0.00001</field>
+      <field name="co2_production">0.00001</field>
+      <field name="water_production">0</field>
+   <field name="required_buildings" eval="[(6,0,[ref('terraform.b_type_life_support'),ref('terraform.b_type_biosphere')])]"></field>
+
+        </record>
+
+         <record id="terraform.b_type_animal_cloner" model="terraform.building_type">
+<field name="name">Animal Clone Plant</field>
+ <field name="max_people">1</field>
+              <field name="energy_production">-100</field>
+              <field name="material">7000</field>
+              <field name="required_enviroment">{"min_temp":"0", "max_temp":"40",
+                                              "min_oxigen":"70",
+                                              "min_co2":"20",
+                                             "min_water":"30",
+                                              "min_gravity":"1","max_gravity":"15",
+                                              "min_air":"0.5","max_air":"4"}</field>
+              <field name="oxigen_production">-0.00001</field>
+      <field name="co2_production">0.00001</field>
+      <field name="water_production">-0.00001</field>
+                <field name="required_buildings" eval="[(6,0,[ref('terraform.b_type_life_support'),ref('terraform.b_type_biosphere')])]"></field>
+
+        </record>
+
+         <record id="terraform.b_type_space_ship" model="terraform.building_type">
+<field name="name">Space Ship</field>
+ <field name="max_people">10</field>
+              <field name="energy_production">-100</field>
+              <field name="material">70000</field>
+              <field name="required_enviroment">{"min_temp":"-100", "max_temp":"400",
+                                              "min_oxigen":"0",
+                                              "min_co2":"0",
+                                             "min_water":"0",
+                                              "min_gravity":"0","max_gravity":"150",
+                                              "min_air":"0.1","max_air":"40"}</field>
+              <field name="oxigen_production">0</field>
+      <field name="co2_production">0.00001</field>
+      <field name="water_production">-0.00001</field>
         </record>
 
     </data>

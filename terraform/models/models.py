@@ -51,13 +51,26 @@ class planet(models.Model):
     average_temperature = fields.Float()
     oxigen = fields.Float()
     co2 = fields.Float()
+    water = fields.Float()
     gravity = fields.Float()
     air_density = fields.Float()
+    energy = fields.Float(default=0)
+    material = fields.Float(default=0)
 
     buildings = fields.One2many('terraform.building','planet')
 
     # Aux fields
     image_small = fields.Image(max_width=50, max_height=50, related='image', store=True)
+
+    def calculate_production(self):
+        for p in self:
+            if p.energy >= 0:
+                for b in p.buildings:
+                    b.produce()
+            else:
+                consumers = p.buildings.filtered(lambda p: p.name.energy_production < 0)
+                for b in consumers:
+                    b.write({'people':0})
 
 
 class sun(models.Model):
@@ -77,6 +90,16 @@ class building(models.Model):
     people = fields.Integer()
     max_people = fields.Integer(related='name.max_people')
     planet = fields.Many2one('terraform.planet')
+    level = fields.Float(default=1)
+
+    def produce(self):
+        for b in self:
+            b.planet.write({
+                'oxigen': b.planet.oxigen + b.name.oxigen_production * b.level,
+                'co2': b.planet.co2 + b.name.co2_production * b.level,
+                'water': b.planet.water + b.name.water_production * b.level,
+                'energy': b.planet.energy + b.name.energy_production * b.level
+            })
 
 
 class building_type(models.Model):
@@ -86,12 +109,16 @@ class building_type(models.Model):
     name = fields.Char()
     max_people = fields.Integer(default=0)
     energy_production = fields.Float(default=0)
+    oxigen_production = fields.Float(default=0)
+    co2_production = fields.Float(default=0)
+    water_production = fields.Float(default=0)
     material = fields.Float(default=100)
     time = fields.Float(default=10)
     required_buildings = fields.Many2many('terraform.building_type', relation='required_buildings_many2many', column1='building', column2='required')
     required_enviroment = fields.Char(default='{"min_temp":"-20", "max_temp":"60",'
                                                '"min_oxigen":"50",'
                                               '"min_co2":"50",'
+                                              '"min_water":"1",'
                                               '"min_gravity":"1","max_gravity":"20",'
                                               '"min_air":"0.1","max_air":"10"}')
     ### falta: requisits planetaris
