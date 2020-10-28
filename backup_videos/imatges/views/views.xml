@@ -1,0 +1,11 @@
+<odoo>
+  <data>
+
+    <menuitem name="Imatges" id="imatges.menu_root"/>
+
+    <!-- menu categories -->
+
+    <menuitem name="Menu 1" id="imatges.menu_1" parent="imatges.menu_root"/>
+
+  </data>
+</odoo>

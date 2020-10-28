@@ -1,0 +1,38 @@
+<odoo><data>
+
+    <record model="ir.ui.view" id="school.individual_task_form">
+        <field name="name">individual task form</field>
+        <field name="model">school.individual_task</field>
+        <field name="arch" type="xml">
+            <form><group>
+                <field name="student" readonly="True"/>
+                <field name="name"/>
+                <field name="qualification" />
+            </group>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="school.groupal_task_form">
+        <field name="name">groupal task form</field>
+        <field name="model">school.groupal_task</field>
+        <field name="arch" type="xml">
+            <form><group>
+                <field name="students" domain="[('is_student','=',True)]"/>
+                <field name="name"/>
+                <field name="qualification" />
+            </group>
+            </form>
+        </field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="school.action_task_window">
+        <field name="name">school task window</field>
+        <field name="res_model">school.task</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem name="task" id="school.menu_task" parent="school.menu_1"
+              action="school.action_task_window"/>
+
+</data></odoo>

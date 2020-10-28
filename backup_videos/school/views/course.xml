@@ -1,0 +1,109 @@
+<odoo><data>
+
+    <record model="ir.ui.view" id="school.course_form">
+        <field name="name">course form</field>
+        <field name="model">school.course</field>
+        <field name="arch" type="xml">
+            <form><group>
+                <field name="name"/>
+                <field name="classrooms" context="{'default_course': active_id}"/>
+                <field name="students" domain="[('is_student','=',True)]"/>
+                <field name="enrolled_students"/>
+            </group>
+            </form>
+        </field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="school.action_course_window">
+        <field name="name">school course window</field>
+        <field name="res_model">school.course</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem name="course" id="school.menu_course" parent="school.menu_1"
+              action="school.action_course_window"/>
+
+    <record model="ir.ui.view" id="school.course_wizard_form">
+        <field name="name">course wizard form</field>
+        <field name="model">school.course_wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="previous" type="object"
+                            string="Previous" class="btn btn-secondary" states="2,3,4"/>
+                    <button name="next" type="object"
+                            string="Next" class="btn oe_highlight" states="1,2,3"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+
+                    <group states="1,2,3,4">
+                        <field name="name"  attrs="{'readonly':[('state','!=','1')]}"/>
+                    </group>
+                    <group col="5" string="Classrooms" states="2">
+                        <field name="c_name"/>
+                        <field name="c_level"/>
+                        <button name="add_classroom" type="object"
+                                string="Add Classroom" class="oe_highlight"></button>
+                    </group>
+                    <group states="2">
+                        <field name="classrooms">
+                            <tree editable="bottom">
+                                <field name="name"/>
+                                <field name="level"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <group col="7" string="Students" states="3">
+                        <field name="s_name"/>
+                        <field name="s_birth_year"/>
+                        <field name="s_dni"/>
+                        <button name="add_student" type="object"
+                                string="Add Student" class="oe_highlight"></button>
+                    </group>
+                    <group states="3">
+                        <field name="students" />
+                    </group>
+                    <group states="4" string="All Students">
+                        <field name="students" >
+                            <tree editable="bottom">
+                                <field name="name"/>
+                                <field name="birth_year"/>
+                                <field name="dni"/>
+                                <field name="classroom"/>
+                            </tree>
+                        </field>
+                    </group>
+
+                    <group states="4" string="Classrooms">
+                        <field name="classrooms" >
+                            <tree editable="bottom">
+                                <field name="name"/>
+                                <field name="students" widget="many2many_tags"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <button name="commit" type="object"
+                            string="Commit" class="oe_highlight" states="4"/>
+                    <footer>
+                        <button name="create_course" type="object"
+                                string="Create" class="oe_highlight" states="4"/>
+                        <button special="cancel" string="Cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="school.action_course_wizard" model="ir.actions.act_window">
+        <field name="name">Launch course wizard</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">school.course_wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="school.course_wizard_form" />
+        <field name="target">new</field>
+    </record>
+
+
+</data></odoo>

@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+          <record id="teacher1" model="school.teacher">
+            <field name="name">Jose</field>
+          </record>
+          <record id="teacher2" model="school.teacher">
+            <field name="name">Natxo</field>
+          </record>
+
+          <record id="class1" model="school.classroom">
+            <field name="name">2DAM</field>
+              <field name="teachers" eval="[(6,0,[ref('school.teacher1'),ref('school.teacher2')])]"></field>
+          </record>
+
+    </data>
+</odoo>
