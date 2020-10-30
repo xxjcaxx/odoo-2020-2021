@@ -64,7 +64,7 @@ class planet(models.Model):
     image_small = fields.Image(max_width=50, max_height=50, related='image', string='Image Small', store=True)
     available_buildings = fields.Many2many('terraform.building_type',compute='_get_available_buildings')
 
-    def calculate_production(self):
+    def calculate_production(self):  # En funcio dels edificis es calcula la producció de coses
         for p in self:
             if p.energy >= 0:
                 for b in p.buildings:
@@ -74,7 +74,7 @@ class planet(models.Model):
                 for b in consumers:
                     b.write({'people':0})
 
-    def filter_building(self,b,p):
+    def filter_building(self,b,p):  # Sols mostra els edificis possibles
         requirements = json.loads(b.required_enviroment)
         print(requirements)
         fit = (float(requirements['min_temp']) <= p.average_temperature < float(requirements['max_temp']) and
@@ -167,6 +167,25 @@ class travel(models.Model):
         for t in self:
             t.distance = 100 # calcular
             t.percent = 50.0
+
+class construction(models.Model):
+    _name = 'terraform.construction'
+    _description = 'Construction of buildings'
+
+    name = fields.Char(compute='_get_name')
+    planet = fields.Many2one('terraform.planet')
+    building_type = fields.Many2one('terraform.building_type')
+    time = fields.Float()
+
+    @api.depends('planet','building_type')
+    def _get_name(self):
+        for c in self:
+            c.name = str(c.planet.name)+" "+str(t.building_type)
+
+    @api.model
+    def create(self,value):
+        new_id = super(construction,self).create(value)
+        new_id.write({'time':new_id.building_type.time})
 
 #####################################3333
 

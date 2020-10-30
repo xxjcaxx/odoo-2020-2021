@@ -28,7 +28,11 @@
       <field name="res_model">terraform.template</field>
       <field name="view_mode">tree,form</field>
     </record>
-
+     <record model="ir.actions.act_window" id="terraform.construction_action_window">
+      <field name="name">Construction</field>
+      <field name="res_model">terraform.construction</field>
+      <field name="view_mode">tree,form</field>
+    </record>
     <!-- Top menu item -->
 
     <menuitem name="Terraform" id="terraform.menu_root"/>
@@ -42,6 +46,8 @@
               action="terraform.settings_action_window"/>
    <menuitem name="Templates" id="terraform.menu_templates" parent="terraform.menu_2"
               action="terraform.templates_action_window"/>
+       <menuitem name="Templates" id="terraform.menu_construction" parent="terraform.menu_2"
+              action="terraform.construction_action_window"/>
 
   </data>
 </odoo>
