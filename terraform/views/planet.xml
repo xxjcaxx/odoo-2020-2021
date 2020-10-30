@@ -74,6 +74,42 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="terraform.planet_kanban_view">
+          <field name="name">planet kanban</field>
+            <field name="model">terraform.planet</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <!--list of field to be loaded -->
+                    <field name="name" />
+                    <field name="id" /> <!-- És important afegir el id per al record.id.value -->
+                    <field name="image" />
+                    <field name="player"/>
+
+                    <templates>
+                    <t t-name="kanban-box">
+                            <div class="oe_product_vignette">
+                                <a type="open">
+                                    <img class="o_image_64_contain"
+                                        t-att-alt="record.name.value"
+
+                                        t-att-src="kanban_image('terraform.planet', 'image', record.id.raw_value)" />
+                                </a>
+                                <div class="oe_product_desc">
+                                    <h4>
+                                        <a type="edit">
+                                            <field name="id"></field>
+                                            <field name="name"></field>
+                                            <field name="player"></field>
+                                        </a>
+                                    </h4>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
         <record model="ir.actions.act_window" id="terraform.planet_action_window">
             <field name="name">Planets</field>
             <field name="res_model">terraform.planet</field>

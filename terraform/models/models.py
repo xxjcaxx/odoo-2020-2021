@@ -144,6 +144,30 @@ class building_type(models.Model):
 
 #https://www.odoo.com/fr_FR/forum/aide-1/question/best-way-to-show-json-data-on-odoo-ui-171100
 
+
+class travel(models.Model):
+    _name = 'terraform.travel'
+    _description = 'Travel to other planets'
+
+    name = fields.Char(compute='_get_name')
+    player = fields.Many2one('terraform.player')
+    origin_planet = fields.Many2one('terraform.planet')
+    destiny_planet = fields.Many2one('terraform.planet')
+    distance = fields.Float(compute='_get_distance')  # Distancia en temps
+    percent = fields.Float(compute='_get_distance')
+    launch_time = fields.Datetime(default=lambda t: fields.Datetime.now())
+
+    @api.depends('origin_planet','destiny_planet','player')
+    def _get_name(self):
+        for t in self:
+            t.name = str(t.player.name)+" "+str(t.origin_planet.name)+" -> "+str(t.destiny_planet.name)
+
+    @api.depends('origin_planet','destiny_planet')
+    def _get_distance(self):
+        for t in self:
+            t.distance = 100 # calcular
+            t.percent = 50.0
+
 #####################################3333
 
 
@@ -181,3 +205,5 @@ class template(models.Model):
     name = fields.Char()
     type = fields.Selection([('1','Player'),('2','Planet')])
     image = fields.Image()
+
+

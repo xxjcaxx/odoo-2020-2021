@@ -6,3 +6,4 @@ access_terraform_settings,terraform.settings,model_terraform_settings,base.group
 access_terraform_template,terraform.template,model_terraform_template,base.group_user,1,1,1,1
 access_terraform_building,terraform.building,model_terraform_building,base.group_user,1,1,1,1
 access_terraform_building_type,terraform.building_type,model_terraform_building_type,base.group_user,1,1,1,1
+access_terraform_travel,terraform.travel,model_terraform_travel,base.group_user,1,1,1,1

@@ -30,6 +30,7 @@
         'views/planet.xml',
 'views/sun.xml',
 'views/buildings.xml',
+'views/travel.xml',
         'views/templates.xml',
     ],
     # only loaded in demonstration mode
