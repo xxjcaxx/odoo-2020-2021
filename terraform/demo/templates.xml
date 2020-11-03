@@ -78,7 +78,7 @@
           <record id="terraform.b_type_biosphere" model="terraform.building_type">
 <field name="name">Biosphere</field>
  <field name="max_people">100</field>
-              <field name="energy_production">1000</field>
+              <field name="energy_production">-10000</field>
               <field name="material">10000</field>
                    <field name="required_enviroment">{"min_temp":"-10", "max_temp":"60",
                                               "min_oxigen":"0",

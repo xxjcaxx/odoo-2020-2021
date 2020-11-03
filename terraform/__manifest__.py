@@ -31,6 +31,7 @@
 'views/sun.xml',
 'views/buildings.xml',
 'views/travel.xml',
+'views/construction.xml',
         'views/templates.xml',
     ],
     # only loaded in demonstration mode

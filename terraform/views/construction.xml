@@ -1,0 +1,28 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="terraform.construction_tree">
+            <field name="name">construction tree</field>
+            <field name="model">terraform.construction</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="progress" widget="progressbar"/>
+                    <field name="building_type"/>
+                    <field name="planet"/>
+                    <button name="update_progress" type="object" string="Update Progress" class="oe_highlight" />
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="terraform.construction_action_window">
+            <field name="name">Construction</field>
+            <field name="res_model">terraform.construction</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+        <menuitem name="Constructions" id="terraform.menu_construction" parent="terraform.menu_2"
+                  action="terraform.construction_action_window"/>
+
+    </data>
+</odoo>

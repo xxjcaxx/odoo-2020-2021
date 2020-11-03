@@ -63,10 +63,12 @@ class planet(models.Model):
     # Aux fields
     image_small = fields.Image(max_width=50, max_height=50, related='image', string='Image Small', store=True)
     available_buildings = fields.Many2many('terraform.building_type',compute='_get_available_buildings')
+    construction_buildings = fields.Many2many('terraform.construction',compute='_get_available_buildings')
 
     def calculate_production(self):  # En funcio dels edificis es calcula la producció de coses
         for p in self:
             if p.energy >= 0:
+                p.write({'energy':0})
                 for b in p.buildings:
                     b.produce()
             else:
@@ -76,14 +78,14 @@ class planet(models.Model):
 
     def filter_building(self,b,p):  # Sols mostra els edificis possibles
         requirements = json.loads(b.required_enviroment)
-        print(requirements)
         fit = (float(requirements['min_temp']) <= p.average_temperature < float(requirements['max_temp']) and
                 p.oxigen >= float(requirements['min_oxigen']) and
                 p.co2 >= float(requirements['min_co2']) and
                 p.water >= float(requirements['min_water']) and
                 float(requirements['min_gravity']) <= p.gravity < float(requirements['max_gravity']) and
                 float(requirements['min_air']) <= p.air_density < float(requirements['max_air']))
-        print(fit)
+        if (b.energy_production + p.energy) <= 0:
+            fit = False
         return fit
 
 
@@ -92,6 +94,8 @@ class planet(models.Model):
             a_b = self.env['terraform.building_type'].search([]).filtered(lambda b: self.filter_building(b,p))
             print(a_b)
             p.available_buildings = a_b.ids
+            c_b = self.env['terraform.construction'].search([('planet','=',p.id)])
+            p.construction_buildings = c_b.ids
 
 class sun(models.Model):
     _name = 'terraform.sun'
@@ -111,6 +115,8 @@ class building(models.Model):
     max_people = fields.Integer(related='name.max_people')
     planet = fields.Many2one('terraform.planet')
     level = fields.Float(default=1)
+    energy = fields.Float(related='name.energy_production')
+    percent_energy = fields.Float(compute='_get_percents')
 
     def produce(self):
         for b in self:
@@ -121,6 +127,9 @@ class building(models.Model):
                 'energy': b.planet.energy + b.name.energy_production * b.level
             })
 
+    def _get_percents(self):
+        for b in self:
+            b.percent_energy= (b.planet.energy - b.name.energy_production)/b.planet.energy
 
 class building_type(models.Model):
     _name = 'terraform.building_type'
@@ -176,16 +185,34 @@ class construction(models.Model):
     planet = fields.Many2one('terraform.planet')
     building_type = fields.Many2one('terraform.building_type')
     time = fields.Float()
+    progress = fields.Float(compute='_get_progress')
 
     @api.depends('planet','building_type')
     def _get_name(self):
         for c in self:
-            c.name = str(c.planet.name)+" "+str(t.building_type)
+            c.name = str(c.planet.name)+" "+str(c.building_type)
 
     @api.model
     def create(self,value):
         new_id = super(construction,self).create(value)
         new_id.write({'time':new_id.building_type.time})
+        return new_id
+
+    def update_progress(self):
+        for c in self:
+            if c.time <= 1:
+                self.env['terraform.building'].create({'name':c.building_type.id,'planet':c.planet.id})
+                c.unlink()
+            else:
+                c.write({'time':c.time-1})
+
+    @api.depends('time')
+    def _get_progress(self):
+        for c in self:
+            if c.building_type:
+                c.progress = 100*(1- c.time/c.building_type.time)
+            else:
+                c.progress = 0
 
 #####################################3333
 

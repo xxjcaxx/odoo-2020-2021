@@ -1,20 +1,20 @@
 <odoo>
-  <data>
+    <data>
 
-            <record model="ir.ui.view" id="terraform.travel_tree">
+        <record model="ir.ui.view" id="terraform.travel_tree">
             <field name="name">travel tree</field>
             <field name="model">terraform.travel</field>
             <field name="arch" type="xml">
-                <tree><field name="name"/>
-
-                             <field name="distance"/>
+                <tree>
+                    <field name="name"/>
+                    <field name="distance"/>
                     <field name="launch_time"/>
                 </tree>
             </field>
         </record>
 
 
-      <record model="ir.ui.view" id="terraform.travel_form">
+        <record model="ir.ui.view" id="terraform.travel_form">
             <field name="name">travel Form</field>
             <field name="model">terraform.travel</field>
             <field name="arch" type="xml">
@@ -22,19 +22,19 @@
                     <sheet>
                         <group string="">
                             <field name="player"/>
-                        <field name="origin_planet"/>
+                            <field name="origin_planet"/>
                             <field name="destiny_planet"/>
-                             <field name="distance"/>
-                            <field name="percent"/>
-                    <field name="launch_time"/>
+                            <field name="distance"/>
+                            <field name="percent" widget="percentpie"/>
+                            <field name="launch_time"/>
                         </group>
                     </sheet>
                 </form>
             </field>
         </record>
 
-      <record model="ir.ui.view" id="terraform.travel_calendar">
-                     <field name="name">travel calendar</field>
+        <record model="ir.ui.view" id="terraform.travel_calendar">
+            <field name="name">travel calendar</field>
             <field name="model">terraform.travel</field>
             <field name="arch" type="xml">
                 <calendar string="Travel Calendar" date_start="launch_time"
@@ -46,17 +46,17 @@
         </record>
 
 
-   <record model="ir.actions.act_window" id="terraform.travel_action_window">
-      <field name="name">travels</field>
-      <field name="res_model">terraform.travel</field>
-      <field name="view_mode">tree,form,calendar</field>
-    </record>
+        <record model="ir.actions.act_window" id="terraform.travel_action_window">
+            <field name="name">travels</field>
+            <field name="res_model">terraform.travel</field>
+            <field name="view_mode">tree,form,calendar</field>
+        </record>
 
-      <!-- Menu -->
+        <!-- Menu -->
 
-    <menuitem name="Travels" id="terraform.menu_travels" parent="terraform.menu_1"
-              action="terraform.travel_action_window"/>
+        <menuitem name="Travels" id="terraform.menu_travels" parent="terraform.menu_1"
+                  action="terraform.travel_action_window"/>
 
 
-  </data>
+    </data>
 </odoo>
