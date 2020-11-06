@@ -50,6 +50,11 @@
                             </group>
                         </group>
                         <notebook>
+
+
+
+
+
                             <page string="Buildings">
                                 <field name="buildings">
                                     <tree>
@@ -71,10 +76,16 @@
                                         <field name="oxigen_production"/>
                                         <field name="co2_production"/>
                                         <field name="water_production"/>
+                                         <field name="heat_production"/>
                                         <field name="material"/>
                                         <field name="time"/>
+                                        <button name="build" type="object" string="Build" class="oe_highlight" context="{'planet':parent.id}"/>
+
                                     </tree>
                                 </field>
+                            </page>
+                            <page string="People">
+                                <button name="send_people" type="object" string="Send People" class="oe_highlight" />
                             </page>
 
                         </notebook>

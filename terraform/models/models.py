@@ -75,6 +75,13 @@ class planet(models.Model):
                 consumers = p.buildings.filtered(lambda p: p.name.energy_production < 0)
                 for b in consumers:
                     b.write({'people':0})
+            if p.player:
+                # Si te jugador, el planeta comença a tindre efecte hivernacle i altres coses
+                if p.co2 > 50:
+                    p.write({'average_temperature': p.average_temperature + (p.co2*(10-p.n_planet))*0.00001})
+              #  if p.average_temperature > 20:
+
+
 
     def filter_building(self,b,p):  # Sols mostra els edificis possibles
         requirements = json.loads(b.required_enviroment)
@@ -84,7 +91,7 @@ class planet(models.Model):
                 p.water >= float(requirements['min_water']) and
                 float(requirements['min_gravity']) <= p.gravity < float(requirements['max_gravity']) and
                 float(requirements['min_air']) <= p.air_density < float(requirements['max_air']))
-        if (b.energy_production + p.energy) <= 0:
+        if (b.energy_production + p.energy) < 0:
             fit = False
         return fit
 
@@ -124,12 +131,23 @@ class building(models.Model):
                 'oxigen': b.planet.oxigen + b.name.oxigen_production * b.level,
                 'co2': b.planet.co2 + b.name.co2_production * b.level,
                 'water': b.planet.water + b.name.water_production * b.level,
-                'energy': b.planet.energy + b.name.energy_production * b.level
+                'energy': b.planet.energy + b.name.energy_production * b.level,
+                'average_temperature': b.planet.average_temperature + b.name.heat_production * b.level
             })
 
     def _get_percents(self):
         for b in self:
-            b.percent_energy= (b.planet.energy - b.name.energy_production)/b.planet.energy
+            consumers = b.planet.buildings.filtered(lambda p: p.name.energy_production < 0)
+            producers = b.planet.buildings.filtered(lambda p: p.name.energy_production >= 0)
+            #total_consumption = sum(consumers.mapped('name.energy_production'))
+            total_production = sum(producers.mapped(lambda r: r.name.energy_production))
+            if total_production != 0:
+                b.percent_energy = (b.name.energy_production/total_production)*100
+            else:
+                b.percent_energy = 0
+            #print(producers,total_production)
+            #else:
+               # b.percent_energy = (b.name.energy_production / total_production) * 100
 
 class building_type(models.Model):
     _name = 'terraform.building_type'
@@ -141,6 +159,7 @@ class building_type(models.Model):
     oxigen_production = fields.Float(default=0)
     co2_production = fields.Float(default=0)
     water_production = fields.Float(default=0)
+    heat_production = fields.Float(default=0)
     material = fields.Float(default=100)
     time = fields.Float(default=10)
     required_buildings = fields.Many2many('terraform.building_type', relation='required_buildings_many2many', column1='building', column2='required')
@@ -150,6 +169,14 @@ class building_type(models.Model):
                                               '"min_water":"1",'
                                               '"min_gravity":"1","max_gravity":"20",'
                                               '"min_air":"0.1","max_air":"10"}')
+
+    def build(self):
+        for b in self:
+            print(self.env.context.get('planet'))
+            construction = self.env['terraform.construction'].create({
+                'planet':self.env.context.get('planet'),
+                'building_type':b.id,
+            })
 
 #https://www.odoo.com/fr_FR/forum/aide-1/question/best-way-to-show-json-data-on-odoo-ui-171100
 
@@ -190,7 +217,7 @@ class construction(models.Model):
     @api.depends('planet','building_type')
     def _get_name(self):
         for c in self:
-            c.name = str(c.planet.name)+" "+str(c.building_type)
+            c.name = str(c.planet.name)+" "+str(c.building_type.name)
 
     @api.model
     def create(self,value):
@@ -241,6 +268,7 @@ class settings(models.Model):
                     'co2': random.betavariate(1.2, 1.5) * 100,
                     'gravity': gravity*20,
                     'air_density': random.betavariate(1.1, 1.6)*gravity*10,
+                    'water': random.betavariate(1.1, 5)*100,
                 })
 
 

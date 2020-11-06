@@ -33,10 +33,11 @@
 'views/travel.xml',
 'views/construction.xml',
         'views/templates.xml',
+'demo/templates.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
         'demo/demo.xml',
-'demo/templates.xml',
+
     ],
 }
