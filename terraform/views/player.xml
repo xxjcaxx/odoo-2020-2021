@@ -33,25 +33,37 @@
                                     <field name="id" /> <!-- És important afegir el id per al record.id.value -->
                                     <field name="image" />
                                     <field name="player"/>
-
                                     <templates>
                                         <t t-name="kanban-box">
-                                            <div class="oe_product_vignette">
+                                            <div class="oe_product_vignette" style="overflow: hidden;">
+                                                <div style="float:left">
                                                 <a type="open">
                                                     <img class="o_image_64_contain"
                                                          t-att-alt="record.name.value"
-
                                                          t-att-src="kanban_image('terraform.planet', 'image', record.id.raw_value)" />
                                                 </a>
                                                 <div class="oe_product_desc">
                                                     <h4>
-                                                        <a type="edit">
-                                                            <field name="id"></field>
+                                                        <a type="edit"  context="{'target':'current'}" >
                                                             <field name="name"></field>
-                                                            <field name="player"></field>
                                                         </a>
                                                     </h4>
+                                                    <button name="open" type="object" string="Open" class="btn btn-primary" >Open</button>
+
+                                                    </div>
+
+
                                                 </div>
+                                                <div style=" float:right">
+                                                        <span style="display:block">🌡 <field name="average_temperature" help="Average Temperature"/></span>
+                                                        <span style="display:block">🌬 <field name="oxigen"/></span>
+                                                        <span style="display:block">CO2 <field name="co2"/></span>
+                                                        <span style="display:block">🏋 <field name="gravity"/></span>
+                                                        <span style="display:block">☁ <field name="air_density"/></span>
+                                                        <span style="display:block">⚡ <field name="energy"/></span>
+                                                        <span style="display:block">🧱 <field name="material"/></span>
+                                                        <span style="display:block">💧 <field name="water"/></span>
+                                                    </div>
                                             </div>
                                         </t>
                                     </templates>

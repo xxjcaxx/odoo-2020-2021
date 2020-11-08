@@ -104,6 +104,17 @@ class planet(models.Model):
             c_b = self.env['terraform.construction'].search([('planet','=',p.id)])
             p.construction_buildings = c_b.ids
 
+    def open(self):
+            return {
+                'type': 'ir.actions.act_window',
+                'res_model': self._name,-
+                'name': self.name,
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_id': self.id,
+                'target': 'current',
+            }
+
 class sun(models.Model):
     _name = 'terraform.sun'
     _description = 'Solar system'
