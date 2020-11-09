@@ -47,6 +47,7 @@
                                 <field name="energy"/>
                                 <field name="gravity"/>
                                 <field name="air_density"/>
+                                 <field name="planetary_changes"/>
                             </group>
                         </group>
                         <notebook>
@@ -59,13 +60,16 @@
                                 <field name="buildings">
                                     <tree>
                                         <field name="name"/>
-                                         <field name="people"/>
+                                        <field name="people"/>
                                         <field name="energy"/>
-<field name="percent_energy"/>
+                                        <field name="percent_energy"/>
+                                        <field name="activo"/>
+                                        <button type="object" class="oe_stat_button" icon="fa-bolt" name="activate">
+                                        </button>
                                     </tree>
                                 </field>
                                 <separator string="Construction"/>
-                                 <field name="construction_buildings"/>
+                                <field name="construction_buildings"/>
                             </page>
                             <page string="Available Buildings">
                                 <field name="available_buildings">
@@ -76,9 +80,10 @@
                                         <field name="oxigen_production"/>
                                         <field name="co2_production"/>
                                         <field name="water_production"/>
-                                         <field name="heat_production"/>
+                                        <field name="heat_production"/>
 
                                         <field name="time"/>
+
                                         <button name="build" type="object" string="Build" class="oe_highlight" context="{'planet':parent.id}"/>
 
                                     </tree>
@@ -89,7 +94,7 @@
                             </page>
 
                         </notebook>
-   <footer>
+                        <footer>
                             <button name="calculate_production" type="object" string="Calculate Production" class="oe_highlight" />
                         </footer>
                     </sheet>

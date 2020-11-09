@@ -120,7 +120,7 @@
                                               "min_air":"0","max_air":"100"}</field>
                <field name="oxigen_production">0</field>
       <field name="co2_production">0</field>
-      <field name="water_production">0</field><field name="heat_production">0.01</field>
+      <field name="water_production">0</field><field name="heat_production">0.001</field>
               <field name="required_buildings" eval="[(6,0,[ref('terraform.b_type_life_support')])]"></field>
 
         </record>
@@ -207,6 +207,7 @@
              <field name="oxigen_production">-0.00001</field>
       <field name="co2_production">0.00001</field>
       <field name="water_production">0</field>
+            <field name="plants_production">0.0001</field>
    <field name="required_buildings" eval="[(6,0,[ref('terraform.b_type_life_support'),ref('terraform.b_type_biosphere')])]"></field>
 
         </record>
@@ -225,6 +226,7 @@
               <field name="oxigen_production">-0.00001</field>
       <field name="co2_production">0.00001</field>
       <field name="water_production">-0.00001</field>
+             <field name="animals_production">0.0001</field>
                 <field name="required_buildings" eval="[(6,0,[ref('terraform.b_type_life_support'),ref('terraform.b_type_biosphere')])]"></field>
 
         </record>
@@ -258,6 +260,21 @@
                                               "min_air":"0.1","max_air":"40"}</field>
               <field name="oxigen_production">0</field>
             <field name="heat_production">-0.01</field>
+        </record>
+
+                  <record id="terraform.b_type_mass_exporter" model="terraform.building_type">
+<field name="name">Mass exporter</field>
+ <field name="max_people">0</field>
+              <field name="energy_production">-100000</field>
+              <field name="required_enviroment">{"min_temp":"-100", "max_temp":"400",
+                                              "min_oxigen":"0",
+                                              "min_co2":"0",
+                                             "min_water":"0",
+                                              "min_gravity":"0","max_gravity":"150",
+                                              "min_air":"0.1","max_air":"40"}</field>
+              <field name="oxigen_production">0</field>
+            <field name="heat_production">0.1</field>
+                      <field name="gravity_production">-0.001</field>
         </record>
 
     </data>

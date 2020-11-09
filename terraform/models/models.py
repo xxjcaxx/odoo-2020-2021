@@ -58,6 +58,7 @@ class planet(models.Model):
     energy = fields.Float(default=0)
 
     plants = fields.Float(default=0) # Percentatge de superficie del planeta en plantes
+    animals = fields.Float(default=0) # Percentatge de superficie del planeta en animals
 
     buildings = fields.One2many('terraform.building','planet')
 
@@ -65,28 +66,43 @@ class planet(models.Model):
     image_small = fields.Image(max_width=50, max_height=50, related='image', string='Image Small', store=True)
     available_buildings = fields.Many2many('terraform.building_type',compute='_get_available_buildings')
     construction_buildings = fields.Many2many('terraform.construction',compute='_get_available_buildings')
+    planetary_changes = fields.Char()  # Mostrar els canvis que estan passant
 
     def calculate_production(self):  # En funcio dels edificis es calcula la producció de coses
         for p in self:
+            p.write({'planetary_changes': ''})
             if p.energy >= 0:
                 p.write({'energy':0})
                 for b in p.buildings:
                     b.produce()
+                p.write({'planetary_changes': p.planetary_changes + " Energy: "+ str(p.energy)})
             else:
                 consumers = p.buildings.filtered(lambda p: p.name.energy_production < 0)
                 for b in consumers:
                     b.write({'people':0})
+                    p.write({'planetary_changes': p.planetary_changes + " Some people dies "})
             if p.player:
                 # Si te jugador, el planeta comença a tindre efecte hivernacle i altres coses
                 if p.co2 > 50:    # Efecte hivernacle
-                    p.write({'average_temperature': p.average_temperature + (p.co2*(10-p.n_planet))*0.00001})
+                    greenhouse = (p.co2*(10-p.n_planet))*0.00001
+                    p.write({'average_temperature': p.average_temperature + greenhouse,
+                             'planetary_changes': p.planetary_changes + " Greenhouse Effect: "+ greenhouse})
                 if p.average_temperature > 20:  # Radiació de la temperatura
                     p.write({'average_temperature': p.average_temperature - (p.average_temperature  * 0.000001)})
-                #if p.plants > 1:  # reduccio de co2
-                #    p.write({'co2': p.co2 + , 'oxigen':  })
-                #if p.plants > 20 and p.water > 20 and co2 > 50# Les plantes creixen soles
-                #if p.plants > 20 and p.water < 20 and  oxigen > 90 # possibles incendis masius
-
+                if p.plants > 1:  # reduccio de co2
+                    p.write({'co2': p.co2 - p.plants * 0.001, 'oxigen':  p.oxigen + p.plants * 0.001 })
+                if p.plants > 20 and p.water > 20 and p.co2 > 50: # Les plantes creixen soles
+                    p.write({'plants': p.plants + p.plants*0.001})
+                if p.animals > 1: # Els animals es poden reproduir
+                    p.write({'animals': p.animals + p.animals * 0.001})
+                    p.write({'plants': p.plants - p.animals * 0.0001})
+                    p.write({'co2': p.co2 + p.animals * 0.0005, 'oxigen':  p.oxigen - p.animals * 0.0005 })
+                if p.plants > 20 and p.water < 20 and  p.oxigen > 90:  # possibles incendis masius
+                    if (random.random() < 0.01):
+                        print('Incendi!!')
+                        p.write({'animals': p.animals - p.animals * 0.1, 'plants': p.plants - p.plants*0.1,
+                                 'co2': p.co2 + p.plants * 0.005, 'oxigen':  p.oxigen - p.plants * 0.005 })
+              ### Falta la densitat de l'aire
 
     def filter_building(self,b,p):  # Sols mostra els edificis possibles
         requirements = json.loads(b.required_enviroment)
@@ -98,14 +114,19 @@ class planet(models.Model):
                 float(requirements['min_air']) <= p.air_density < float(requirements['max_air']))
         if (b.energy_production + p.energy) < 0:
             fit = False
+        if b.required_buildings & p.buildings.mapped('name') != b.required_buildings:
+         #   print(b.required_buildings.ids, p.buildings.ids)
+            fit = False
+      #  else:
+      #      print(b.name,b.required_buildings.ids, p.buildings.ids)
         return fit
 
 
     def _get_available_buildings(self):
         for p in self:
             a_b = self.env['terraform.building_type'].search([]).filtered(lambda b: self.filter_building(b,p))
-            print(a_b)
             p.available_buildings = a_b.ids
+
             c_b = self.env['terraform.construction'].search([('planet','=',p.id)])
             p.construction_buildings = c_b.ids
 
@@ -140,17 +161,19 @@ class building(models.Model):
     level = fields.Float(default=1)
     energy = fields.Float(related='name.energy_production')
     percent_energy = fields.Float(compute='_get_percents')
+    activo = fields.Boolean(default=True)
 
     def produce(self):
         for b in self:
-            b.planet.write({
+            if b.activo:
+                b.planet.write({
                 'oxigen': b.planet.oxigen + b.name.oxigen_production * b.level,
                 'co2': b.planet.co2 + b.name.co2_production * b.level,
                 'water': b.planet.water + b.name.water_production * b.level,
                 'energy': b.planet.energy + b.name.energy_production * b.level,
                 'average_temperature': b.planet.average_temperature + b.name.heat_production * b.level,
-
-            })
+                'gravity': b.planet.gravity + b.name.gravity_production * b.level,
+                })
 
     def _get_percents(self):
         for b in self:
@@ -166,6 +189,10 @@ class building(models.Model):
             #else:
                # b.percent_energy = (b.name.energy_production / total_production) * 100
 
+    def activate(self):
+        for b in self:
+            b.write({'activo': not b.activo })
+
 class building_type(models.Model):
     _name = 'terraform.building_type'
     _description = 'Types of buildings'
@@ -177,6 +204,9 @@ class building_type(models.Model):
     co2_production = fields.Float(default=0)
     water_production = fields.Float(default=0)
     heat_production = fields.Float(default=0)
+    plants_production = fields.Float(default=0)
+    animals_production = fields.Float(default=0)
+    gravity_production = fields.Float(default=0)
 
     time = fields.Float(default=10)
     required_buildings = fields.Many2many('terraform.building_type', relation='required_buildings_many2many', column1='building', column2='required')
