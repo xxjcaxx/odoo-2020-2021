@@ -2466,6 +2466,12 @@ zni8UYdONZypYJ1AqQtknUwmUWKf+nAT0hb61ozNRkTOOHOjB38dK6VAvCUwowyLxQLr9RqLxQLb
         <record id="terraform.planet_1" model="terraform.planet">
             <field name="name">Marte</field>
             <field name="n_planet">4</field>
+            <field name="average_temperature">4</field>
+            <field name="oxigen">1</field>
+            <field name="co2">2</field>
+            <field name="water">10</field>
+            <field name="gravity">5</field>
+            <field name="air_density">20</field>
             <field name="image">/9j/4AAQSkZJRgABAQEBLAEsAAD/4Rt2RXhpZgAASUkqAAgAAAAGABoBBQABAAAAVgAAABsBBQAB
 AAAAXgAAACgBAwABAAAAAgAAADEBAgANAAAAZgAAADIBAgAUAAAAdAAAAGmHBAABAAAAiAAAAJoA
 AAAsAQAAAQAAACwBAAABAAAAR0lNUCAyLjEwLjE4AAAyMDIwOjExOjA5IDA4OjQwOjMzAAEAAaAD

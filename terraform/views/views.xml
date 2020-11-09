@@ -28,6 +28,16 @@
       <field name="res_model">terraform.template</field>
       <field name="view_mode">tree,form</field>
     </record>
+           <record model="ir.actions.act_window" id="terraform.p_changes_action_window">
+      <field name="name">Planet Changes</field>
+      <field name="res_model">terraform.planetary_changes</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+                 <record model="ir.actions.act_window" id="terraform.disaster_action_window">
+      <field name="name">Disasters</field>
+      <field name="res_model">terraform.disaster</field>
+      <field name="view_mode">tree,form</field>
+    </record>
 
     <!-- Top menu item -->
 
@@ -42,7 +52,9 @@
               action="terraform.settings_action_window"/>
    <menuitem name="Templates" id="terraform.menu_templates" parent="terraform.menu_2"
               action="terraform.templates_action_window"/>
-
-
+<menuitem name="Planetary Changes" id="terraform.menu_p_changes" parent="terraform.menu_2"
+              action="terraform.p_changes_action_window"/>
+<menuitem name="Disasters" id="terraform.menu_disasters" parent="terraform.menu_2"
+              action="terraform.disaster_action_window"/>
   </data>
 </odoo>

@@ -1,5 +1,29 @@
 <odoo>
     <data>
+
+         <record model="ir.ui.view" id="terraform.planet_changes_graph">
+      <field name="name">Planet Changes graph</field>
+      <field name="model">terraform.planetary_changes</field>
+      <field name="arch" type="xml">
+        <graph string="Changes History" type="line">
+          <field name="time"  type="row"/>
+           <field name="planet"  type="col"/>
+          <field name="greenhouse" type="measure"/>
+
+        </graph>
+
+      </field>
+    </record>
+
+
+                <act_window id="terraform.launch_planet_changes_graph"
+                    name="Launch Planet Changes graph"
+                    res_model="terraform.planetary_changes"
+                    view_mode="graph"
+                    target="new"
+                    domain="[('planet','=',active_id)]"
+        />
+
         <record model="ir.ui.view" id="terraform.planet_tree">
             <field name="name">planet tree</field>
             <field name="model">terraform.planet</field>
@@ -18,6 +42,8 @@
                     <field name="energy"/>
                     <field name="gravity"/>
                     <field name="air_density"/>
+                    <field name="plants"/>
+                    <field name="animals"/>
                 </tree>
             </field>
         </record>
@@ -47,15 +73,11 @@
                                 <field name="energy"/>
                                 <field name="gravity"/>
                                 <field name="air_density"/>
-                                 <field name="planetary_changes"/>
+                                <field name="plants"/>
+                                <field name="animals"/>
                             </group>
                         </group>
                         <notebook>
-
-
-
-
-
                             <page string="Buildings">
                                 <field name="buildings">
                                     <tree>
@@ -88,6 +110,40 @@
 
                                     </tree>
                                 </field>
+                            </page>
+                            <page string="Planetary Changes">
+                                <field name="planetary_changes">
+                                    <tree limit="10">
+                                        <field name="name"/>
+                                        <field name="energy"/>
+                                        <field name="greenhouse"/>
+                                        <field name="emission"/>
+                                        <field name="plants_co2_reduction"/>
+                                        <field name="plants_o_increment"/>
+                                        <field name="animals_co2_increment"/>
+                                        <field name="animals_o_reduction"/>
+                                        <field name="new_animals"/>
+                                        <field name="new_plants"/>
+                                        <field name="plants_eated"/>
+                                        <field name="dead_animals_o"/>
+                                        <field name="dead_plants_co2"/>
+                                        <field name="dead_animals_temperature"/>
+                                        <field name="dead_plants_temperature"/>
+                                    </tree>
+                                </field>
+
+                                 <button name="%(terraform.launch_planet_changes_graph)d" type="action" string="Show Graph"
+                                        class="oe_highlight" ></button>
+                            </page>
+                               <page string="Disasters">
+                                <field name="disasters">
+                                    <tree limit="10">
+                                        <field name="name"/>
+                                        <field name="time"/>
+
+                                    </tree>
+                                </field>
+
                             </page>
                             <page string="People">
                                 <button name="send_people" type="object" string="Send People" class="oe_highlight" />
@@ -167,6 +223,9 @@
             <field name="res_model">terraform.planet</field>
             <field name="view_mode">tree,form,kanban</field>
         </record>
+
+
+
 
         <!-- Menu -->
 

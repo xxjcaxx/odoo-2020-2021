@@ -66,42 +66,100 @@ class planet(models.Model):
     image_small = fields.Image(max_width=50, max_height=50, related='image', string='Image Small', store=True)
     available_buildings = fields.Many2many('terraform.building_type',compute='_get_available_buildings')
     construction_buildings = fields.Many2many('terraform.construction',compute='_get_available_buildings')
-    planetary_changes = fields.Char()  # Mostrar els canvis que estan passant
+    planetary_changes = fields.One2many('terraform.planetary_changes','planet')  # Mostrar els canvis que estan passant
+    disasters = fields.One2many('terraform.disaster', 'planet')  # Mostrar els canvis que estan passant
 
     def calculate_production(self):  # En funcio dels edificis es calcula la producció de coses
         for p in self:
-            p.write({'planetary_changes': ''})
+            date = fields.Datetime.now()
+            greenhouse = 0
+            emission = 0
+            CO2_plants = 0
+            O_plants = 0
+            new_plants = 0
+            new_animals = 0
+            plants_eated = 0
+            CO2_animals = 0
+            O_animals = 0
+            death_animals_O = 0
+            death_plants_co2 = 0
+            death_animals_t = 0
+            death_plants_t = 0
+
             if p.energy >= 0:
                 p.write({'energy':0})
                 for b in p.buildings:
                     b.produce()
-                p.write({'planetary_changes': p.planetary_changes + " Energy: "+ str(p.energy)})
             else:
                 consumers = p.buildings.filtered(lambda p: p.name.energy_production < 0)
                 for b in consumers:
                     b.write({'people':0})
-                    p.write({'planetary_changes': p.planetary_changes + " Some people dies "})
             if p.player:
+                planetary_changes = p.env['terraform.planetary_changes'].create(
+                    {'planet': p.id, 'time': date, 'name': p.name + " " + str(date)})
                 # Si te jugador, el planeta comença a tindre efecte hivernacle i altres coses
                 if p.co2 > 50:    # Efecte hivernacle
                     greenhouse = (p.co2*(10-p.n_planet))*0.00001
-                    p.write({'average_temperature': p.average_temperature + greenhouse,
-                             'planetary_changes': p.planetary_changes + " Greenhouse Effect: "+ greenhouse})
                 if p.average_temperature > 20:  # Radiació de la temperatura
-                    p.write({'average_temperature': p.average_temperature - (p.average_temperature  * 0.000001)})
+                    emission = p.average_temperature  * 0.000001
                 if p.plants > 1:  # reduccio de co2
-                    p.write({'co2': p.co2 - p.plants * 0.001, 'oxigen':  p.oxigen + p.plants * 0.001 })
-                if p.plants > 20 and p.water > 20 and p.co2 > 50: # Les plantes creixen soles
-                    p.write({'plants': p.plants + p.plants*0.001})
-                if p.animals > 1: # Els animals es poden reproduir
-                    p.write({'animals': p.animals + p.animals * 0.001})
-                    p.write({'plants': p.plants - p.animals * 0.0001})
-                    p.write({'co2': p.co2 + p.animals * 0.0005, 'oxigen':  p.oxigen - p.animals * 0.0005 })
-                if p.plants > 20 and p.water < 20 and  p.oxigen > 90:  # possibles incendis masius
+                    CO2_plants = p.plants * 0.001
+                    O_plants = p.plants * 0.001
+                if p.plants > 2 and p.water > 20 and p.co2 > 50: # Les plantes creixen soles
+                    new_plants = p.plants*0.001
+                if p.animals > 1: # Els animals es reprodueixen i es menjen les plantes
+                    new_animals = p.animals * 0.001
+                    plants_eated = p.animals * 0.0001
+                    CO2_animals = p.animals * 0.0005
+                    O_animals = p.animals * 0.0005
+                if p.oxigen < 20 and p.animals > 0:
+                    death_animals_O = p.animals * 0.001 * (20 - p.oxigen)
+                if p.co2 < 20 and p.plants > 0:
+                    death_plants_co2 = p.plants * 0.001 * (20 - p.co2)
+                if (-20 > p.average_temperature or p.average_temperature > 60) and (p.plants > 0 or p.animals > 0 ):
+                    death_plants_t = p.plants * 0.01
+                    death_animals_t = p.animals * 0.01
+                p.write({
+                    'average_temperature': p.average_temperature + greenhouse - emission,
+                    'plants': p.plants + new_plants - plants_eated - death_plants_co2 - death_plants_t,
+                    'animals': p.animals + new_animals - death_animals_O - death_animals_t,
+                    'co2': p.co2 - CO2_plants + CO2_animals,
+                    'oxigen': p.oxigen + O_plants - O_animals,
+                })
+                planetary_changes.write({
+                    'energy': p.energy,
+                    'greenhouse': greenhouse,
+                    'emission': emission,
+                    'plants_co2_reduction': CO2_plants,
+                    'plants_o_increment': O_plants,
+                    'animals_co2_increment': CO2_animals,
+                    'animals_o_reduction': O_animals,
+                    'new_plants': new_plants,
+                    'new_animals': new_animals,
+                    'plants_eated': plants_eated,
+                    'dead_animals_o': death_animals_O,
+                    'dead_plants_co2': death_plants_co2,
+                    'dead_animals_temperature': death_animals_t,
+                    'dead_plants_temperature': death_plants_t,
+                })
+
+                ########### Desastres naturals
+                if p.plants > 20 and p.water < 20 and p.oxigen > 90:  # possibles incendis masius
                     if (random.random() < 0.01):
                         print('Incendi!!')
-                        p.write({'animals': p.animals - p.animals * 0.1, 'plants': p.plants - p.plants*0.1,
-                                 'co2': p.co2 + p.plants * 0.005, 'oxigen':  p.oxigen - p.plants * 0.005 })
+                        p.write({'animals': p.animals - p.animals * 0.1, 'plants': p.plants - p.plants * 0.1,
+                                 'co2': p.co2 + p.plants * 0.5, 'oxigen': p.oxigen - p.plants * 0.5
+                                 })
+                        p.env['terraform.disaster'].create({'name':'Fire in '+p.name, 'planet': p.id, 'time': date})
+
+                if (random.random() < 0.001 and p.animals > 20):
+                    p.write({'animals': p.animals - p.animals * 0.1, 'plants': p.plants - p.plants * 0.1 })
+                    p.env['terraform.disaster'].create({'name': 'Virus in ' + p.name, 'planet': p.id, 'time': date})
+                if (random.random() < 0.001):
+                    p.write({'animals': p.animals - p.animals * 0.1, 'plants': p.plants - p.plants * 0.1 , 'co2': p.co2 + 5 })
+                    p.env['terraform.disaster'].create({'name': 'Meteorite in ' + p.name, 'planet': p.id, 'time': date})
+
+
               ### Falta la densitat de l'aire
 
     def filter_building(self,b,p):  # Sols mostra els edificis possibles
@@ -141,6 +199,12 @@ class planet(models.Model):
                 'target': 'current',
             }
 
+    @api.model
+    def update_resources(self):
+        planets = self.env['terraform.planet'].search([])
+        planets.calculate_production()
+     #   print(planets)
+
 class sun(models.Model):
     _name = 'terraform.sun'
     _description = 'Solar system'
@@ -173,6 +237,8 @@ class building(models.Model):
                 'energy': b.planet.energy + b.name.energy_production * b.level,
                 'average_temperature': b.planet.average_temperature + b.name.heat_production * b.level,
                 'gravity': b.planet.gravity + b.name.gravity_production * b.level,
+                'plants': b.planet.plants + b.name.plants_production * b.level,
+                'animals': b.planet.animals + b.name.animals_production * b.level,
                 })
 
     def _get_percents(self):
@@ -288,7 +354,41 @@ class construction(models.Model):
             else:
                 c.progress = 0
 
+
 #####################################3333
+
+
+
+class planetary_changes(models.Model):
+    _name = 'terraform.planetary_changes'
+    _description = 'Changes in planet over the time'
+
+    name = fields.Char()
+    planet = fields.Many2one('terraform.planet')
+    time = fields.Char()
+    energy = fields.Float(digits=(12,4))
+    greenhouse = fields.Float(digits=(12,4))
+    emission = fields.Float(digits=(12,4))
+    plants_co2_reduction = fields.Float(digits=(12,4))
+    plants_o_increment = fields.Float(digits=(12,4))
+    animals_co2_increment = fields.Float(digits=(12,4))
+    animals_o_reduction = fields.Float(digits=(12,4))
+    new_animals = fields.Float(digits=(12,4))
+    plants_eated = fields.Float(digits=(12,4))
+    dead_animals_o = fields.Float(digits=(12,4))
+    dead_plants_co2 = fields.Float(digits=(12,4))
+    dead_animals_temperature = fields.Float(digits=(12,4))
+    dead_plants_temperature = fields.Float(digits=(12,4))
+    new_plants = fields.Float(digits=(12,4))
+
+
+class natural_disaster(models.Model):
+    _name = 'terraform.disaster'
+
+    name = fields.Char()
+    planet = fields.Many2one('terraform.planet')
+    time = fields.Datetime()
+
 
 
 class settings(models.Model):

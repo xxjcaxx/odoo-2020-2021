@@ -277,5 +277,23 @@
                       <field name="gravity_production">-0.001</field>
         </record>
 
+              <record id="terraform.b_type_biomass_generator" model="terraform.building_type">
+<field name="name">Biomass generator</field>
+ <field name="max_people">0</field>
+              <field name="energy_production">10000</field>
+              <field name="required_enviroment">{"min_temp":"-50", "max_temp":"100",
+                                              "min_oxigen":"10",
+                                              "min_co2":"0",
+                                             "min_water":"0",
+                                              "min_gravity":"0","max_gravity":"150",
+                                              "min_air":"0.1","max_air":"40"}</field>
+              <field name="oxigen_production">-0.01</field>
+                  <field name="co2_production">0.01</field>
+                  <field name="plants_production">-0.01</field>
+            <field name="heat_production">0.2</field>
+                      <field name="gravity_production">-0.001</field>
+        </record>
+
+
     </data>
 </odoo>
