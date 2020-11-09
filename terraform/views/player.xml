@@ -61,7 +61,7 @@
                                                         <span style="display:block">🏋 <field name="gravity"/></span>
                                                         <span style="display:block">☁ <field name="air_density"/></span>
                                                         <span style="display:block">⚡ <field name="energy"/></span>
-                                                        <span style="display:block">🧱 <field name="material"/></span>
+
                                                         <span style="display:block">💧 <field name="water"/></span>
                                                     </div>
                                             </div>

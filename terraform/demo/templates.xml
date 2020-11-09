@@ -64,7 +64,7 @@
   <record id="terraform.b_type_life_support" model="terraform.building_type">
 <field name="name">Life suport system</field>
  <field name="max_people">10</field>
-      <field name="material">10000</field>
+
       <field name="required_enviroment">{"min_temp":"-200", "max_temp":"600",
                                               "min_oxigen":"0",
                                               "min_co2":"0", "min_water":"0",
@@ -79,7 +79,7 @@
 <field name="name">Biosphere</field>
  <field name="max_people">100</field>
               <field name="energy_production">-10000</field>
-              <field name="material">10000</field>
+
                    <field name="required_enviroment">{"min_temp":"-10", "max_temp":"60",
                                               "min_oxigen":"0",
                                               "min_co2":"0", "min_water":"60",
@@ -95,7 +95,7 @@
 <field name="name">Sun Panel</field>
  <field name="max_people">0</field>
                  <field name="energy_production">1050</field>
-                 <field name="material">1000</field>
+
                    <field name="required_enviroment">{"min_temp":"-10", "max_temp":"60",
                                               "min_oxigen":"0",
                                               "min_co2":"0", "min_water":"0",
@@ -112,7 +112,7 @@
 <field name="name">Nuclear Plant</field>
  <field name="max_people">10</field>
               <field name="energy_production">105000</field>
-              <field name="material">70000</field>
+
               <field name="required_enviroment">{"min_temp":"-100", "max_temp":"100",
                                               "min_oxigen":"0",
                                               "min_co2":"0", "min_water":"10",
@@ -129,7 +129,7 @@
 <field name="name">Oxigen Generator</field>
  <field name="max_people">1</field>
               <field name="energy_production">-1000</field>
-              <field name="material">7000</field>
+
               <field name="required_enviroment">{"min_temp":"-10", "max_temp":"50",
                                               "min_oxigen":"0",
                                               "min_co2":"10", "min_water":"10",
@@ -145,7 +145,7 @@
 <field name="name">co2 Generator</field>
  <field name="max_people">1</field>
               <field name="energy_production">100</field>
-              <field name="material">7000</field>
+
               <field name="required_enviroment">{"min_temp":"-10", "max_temp":"80",
                                               "min_oxigen":"50",
                                               "min_co2":"0", "min_water":"1",
@@ -162,7 +162,7 @@
 <field name="name">Water Well</field>
  <field name="max_people">1</field>
               <field name="energy_production">-1000</field>
-              <field name="material">7000</field>
+
               <field name="required_enviroment">{"min_temp":"0", "max_temp":"80",
                                               "min_oxigen":"0",
                                               "min_co2":"0", "min_water":"10",
@@ -179,7 +179,7 @@
 <field name="name">Water Generator</field>
  <field name="max_people">1</field>
               <field name="energy_production">-10000</field>
-              <field name="material">7000</field>
+
               <field name="required_enviroment">{"min_temp":"0", "max_temp":"80",
                                               "min_oxigen":"50",
                                               "min_co2":"0",
@@ -197,7 +197,7 @@
 <field name="name">Seed Planter</field>
  <field name="max_people">1</field>
               <field name="energy_production">-100</field>
-              <field name="material">7000</field>
+
               <field name="required_enviroment">{"min_temp":"0", "max_temp":"40",
                                               "min_oxigen":"50",
                                               "min_co2":"50",
@@ -215,7 +215,7 @@
 <field name="name">Animal Clone Plant</field>
  <field name="max_people">1</field>
               <field name="energy_production">-100</field>
-              <field name="material">7000</field>
+
               <field name="required_enviroment">{"min_temp":"0", "max_temp":"40",
                                               "min_oxigen":"70",
                                               "min_co2":"20",
@@ -233,7 +233,7 @@
 <field name="name">Space Ship</field>
  <field name="max_people">10</field>
               <field name="energy_production">-100</field>
-              <field name="material">70000</field>
+
               <field name="required_enviroment">{"min_temp":"-100", "max_temp":"400",
                                               "min_oxigen":"0",
                                               "min_co2":"0",
@@ -249,7 +249,7 @@
 <field name="name">Space Shader</field>
  <field name="max_people">0</field>
               <field name="energy_production">0</field>
-              <field name="material">70000</field>
+
               <field name="required_enviroment">{"min_temp":"-100", "max_temp":"400",
                                               "min_oxigen":"0",
                                               "min_co2":"0",

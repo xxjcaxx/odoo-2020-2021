@@ -56,7 +56,8 @@ class planet(models.Model):
     gravity = fields.Float()
     air_density = fields.Float()
     energy = fields.Float(default=0)
-    material = fields.Float(default=0)
+
+    plants = fields.Float(default=0) # Percentatge de superficie del planeta en plantes
 
     buildings = fields.One2many('terraform.building','planet')
 
@@ -77,10 +78,14 @@ class planet(models.Model):
                     b.write({'people':0})
             if p.player:
                 # Si te jugador, el planeta comença a tindre efecte hivernacle i altres coses
-                if p.co2 > 50:
+                if p.co2 > 50:    # Efecte hivernacle
                     p.write({'average_temperature': p.average_temperature + (p.co2*(10-p.n_planet))*0.00001})
-              #  if p.average_temperature > 20:
-
+                if p.average_temperature > 20:  # Radiació de la temperatura
+                    p.write({'average_temperature': p.average_temperature - (p.average_temperature  * 0.000001)})
+                #if p.plants > 1:  # reduccio de co2
+                #    p.write({'co2': p.co2 + , 'oxigen':  })
+                #if p.plants > 20 and p.water > 20 and co2 > 50# Les plantes creixen soles
+                #if p.plants > 20 and p.water < 20 and  oxigen > 90 # possibles incendis masius
 
 
     def filter_building(self,b,p):  # Sols mostra els edificis possibles
@@ -107,7 +112,7 @@ class planet(models.Model):
     def open(self):
             return {
                 'type': 'ir.actions.act_window',
-                'res_model': self._name,-
+                'res_model': self._name,
                 'name': self.name,
                 'view_type': 'form',
                 'view_mode': 'form',
@@ -143,7 +148,8 @@ class building(models.Model):
                 'co2': b.planet.co2 + b.name.co2_production * b.level,
                 'water': b.planet.water + b.name.water_production * b.level,
                 'energy': b.planet.energy + b.name.energy_production * b.level,
-                'average_temperature': b.planet.average_temperature + b.name.heat_production * b.level
+                'average_temperature': b.planet.average_temperature + b.name.heat_production * b.level,
+
             })
 
     def _get_percents(self):
@@ -171,7 +177,7 @@ class building_type(models.Model):
     co2_production = fields.Float(default=0)
     water_production = fields.Float(default=0)
     heat_production = fields.Float(default=0)
-    material = fields.Float(default=100)
+
     time = fields.Float(default=10)
     required_buildings = fields.Many2many('terraform.building_type', relation='required_buildings_many2many', column1='building', column2='required')
     required_enviroment = fields.Char(default='{"min_temp":"-20", "max_temp":"60",'

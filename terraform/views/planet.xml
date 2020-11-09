@@ -14,7 +14,7 @@
                     <field name="oxigen"/>
                     <field name="co2"/>
                     <field name="water"/>
-                    <field name="material"/>
+
                     <field name="energy"/>
                     <field name="gravity"/>
                     <field name="air_density"/>
@@ -43,7 +43,7 @@
                             <group>
                                 <field name="co2"/>
                                 <field name="water"/>
-                                <field name="material"/>
+
                                 <field name="energy"/>
                                 <field name="gravity"/>
                                 <field name="air_density"/>
@@ -77,7 +77,7 @@
                                         <field name="co2_production"/>
                                         <field name="water_production"/>
                                          <field name="heat_production"/>
-                                        <field name="material"/>
+
                                         <field name="time"/>
                                         <button name="build" type="object" string="Build" class="oe_highlight" context="{'planet':parent.id}"/>
 
@@ -147,7 +147,7 @@
                     <field name="oxigen" filter_domain="[('oxigen','>=',self-1),('oxigen','&lt;=',self+1)]"/>
                     <field name="co2" filter_domain="[('co2','>=',self-1),('co2','&lt;=',self+1)]"/>
                     <field name="water"/>
-                    <field name="material"/>
+
                     <field name="energy"/>
                     <field name="gravity"/>
                     <field name="air_density"/>
