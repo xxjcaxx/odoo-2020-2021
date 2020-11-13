@@ -218,7 +218,9 @@ class planet(models.Model):
      #   print(planets)
 
     def asteroid_collision(self):
+
         for p in self:
+
             p.write({
                 'water': p.water + random.randint(0,10),
                 'co2': p.co2 + random.randint(2,10),
