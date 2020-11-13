@@ -31,7 +31,7 @@
            <record model="ir.actions.act_window" id="terraform.p_changes_action_window">
       <field name="name">Planet Changes</field>
       <field name="res_model">terraform.planetary_changes</field>
-      <field name="view_mode">tree,form</field>
+      <field name="view_mode">tree,form,graph</field>
     </record>
                  <record model="ir.actions.act_window" id="terraform.disaster_action_window">
       <field name="name">Disasters</field>

@@ -152,6 +152,7 @@
                         </notebook>
                         <footer>
                             <button name="calculate_production" type="object" string="Calculate Production" class="oe_highlight" />
+                             <button name="asteroid_collision" type="object" string="Asteroid Collision" class="oe_highlight" />
                         </footer>
                     </sheet>
                 </form>
@@ -214,6 +215,8 @@
                     <field name="air_density"/>
                     <filter name="life_temperature" string="Live Temperature" domain="[('average_temperature','>',0),('average_temperature','&lt;',50)]" />
                     <filter name="group_by_sun" string="Gruop by Sun" context="{'group_by': 'sun'}"/>
+                    <filter name="group_by_player" string="Gruop by Player" context="{'group_by': 'player'}"/>
+
                 </search>
             </field>
         </record>

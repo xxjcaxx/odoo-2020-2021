@@ -101,7 +101,7 @@ class planet(models.Model):
                 if p.co2 > 50:    # Efecte hivernacle
                     greenhouse = (p.co2*(10-p.n_planet))*0.00001
                 if p.average_temperature > 20:  # Radiació de la temperatura
-                    emission = p.average_temperature  * 0.000001
+                    emission = p.average_temperature  * 0.00001
                 if p.plants > 1:  # reduccio de co2
                     CO2_plants = p.plants * 0.001
                     O_plants = p.plants * 0.001
@@ -119,6 +119,7 @@ class planet(models.Model):
                 if (-20 > p.average_temperature or p.average_temperature > 60) and (p.plants > 0 or p.animals > 0 ):
                     death_plants_t = p.plants * 0.01
                     death_animals_t = p.animals * 0.01
+                #print(p.average_temperature, greenhouse, emission,p.average_temperature + greenhouse - emission)
                 p.write({
                     'average_temperature': p.average_temperature + greenhouse - emission,
                     'plants': p.plants + new_plants - plants_eated - death_plants_co2 - death_plants_t,
@@ -156,11 +157,22 @@ class planet(models.Model):
                     p.write({'animals': p.animals - p.animals * 0.1, 'plants': p.plants - p.plants * 0.1 })
                     p.env['terraform.disaster'].create({'name': 'Virus in ' + p.name, 'planet': p.id, 'time': date})
                 if (random.random() < 0.001):
-                    p.write({'animals': p.animals - p.animals * 0.1, 'plants': p.plants - p.plants * 0.1 , 'co2': p.co2 + 5 })
+                    p.write({'animals': p.animals - p.animals * 0.1,
+                             'plants': p.plants - p.plants * 0.1 ,
+                             'co2': p.co2 + 5,
+                             'water': p.water + (1 if random.random() < 0.1 else 0)})
                     p.env['terraform.disaster'].create({'name': 'Meteorite in ' + p.name, 'planet': p.id, 'time': date})
+
+                #### Ara cal eliminar historic antic
+                if len(self.env['terraform.planetary_changes'].search([('planet','=',p.id)])) > 100:
+                    n = len(self.env['terraform.planetary_changes'].search([('planet','=',p.id)]))-100
+                    eliminar = self.env['terraform.planetary_changes'].search([('planet','=',p.id)],limit=n)
+                    eliminar.unlink()
 
 
               ### Falta la densitat de l'aire
+
+
 
     def filter_building(self,b,p):  # Sols mostra els edificis possibles
         requirements = json.loads(b.required_enviroment)
@@ -204,6 +216,16 @@ class planet(models.Model):
         planets = self.env['terraform.planet'].search([])
         planets.calculate_production()
      #   print(planets)
+
+    def asteroid_collision(self):
+        for p in self:
+            p.write({
+                'water': p.water + random.randint(0,10),
+                'co2': p.co2 + random.randint(2,10),
+                'air_density': p.air_density + random.randint(0,10),
+                'plants': p.plants - p.plants * 0.5,
+                'animals': p.animals - p.animals * 0.5
+            })
 
 class sun(models.Model):
     _name = 'terraform.sun'
@@ -388,8 +410,6 @@ class natural_disaster(models.Model):
     name = fields.Char()
     planet = fields.Many2one('terraform.planet')
     time = fields.Datetime()
-
-
 
 class settings(models.Model):
     _name = 'terraform.settings'
