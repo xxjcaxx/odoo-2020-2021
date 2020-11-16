@@ -4,6 +4,8 @@ from odoo import models, fields, api
 import random
 import string
 import json
+import math
+from datetime import datetime, timedelta
 
 
 def name_generator():
@@ -68,6 +70,9 @@ class planet(models.Model):
     construction_buildings = fields.Many2many('terraform.construction',compute='_get_available_buildings')
     planetary_changes = fields.One2many('terraform.planetary_changes','planet')  # Mostrar els canvis que estan passant
     disasters = fields.One2many('terraform.disaster', 'planet')  # Mostrar els canvis que estan passant
+    temperature_status = fields.Selection([('1','frozen'),('2','cold'),('3','Good'),('4','hot'),('5','Too Hot')],default='3')
+    oxigen_status = fields.Selection([('2','Few oxigen'),('3','Good oxigen'),('4','Too oxigen')],default='3')
+    co2_status = fields.Selection([('2', 'Few co2'), ('3', 'Good co2'), ('4', 'Too co2')], default='3')
 
     def calculate_production(self):  # En funcio dels edificis es calcula la producció de coses
         for p in self:
@@ -99,9 +104,9 @@ class planet(models.Model):
                     {'planet': p.id, 'time': date, 'name': p.name + " " + str(date)})
                 # Si te jugador, el planeta comença a tindre efecte hivernacle i altres coses
                 if p.co2 > 50:    # Efecte hivernacle
-                    greenhouse = (p.co2*(10-p.n_planet))*0.00001
+                    greenhouse = math.pow((p.co2*(10-p.n_planet)),1.1) * 0.00001
                 if p.average_temperature > 20:  # Radiació de la temperatura
-                    emission = p.average_temperature  * 0.00001
+                    emission = math.pow(p.average_temperature,2)  * 0.00001
                 if p.plants > 1:  # reduccio de co2
                     CO2_plants = p.plants * 0.001
                     O_plants = p.plants * 0.001
@@ -127,6 +132,33 @@ class planet(models.Model):
                     'co2': p.co2 - CO2_plants + CO2_animals,
                     'oxigen': p.oxigen + O_plants - O_animals,
                 })
+                temperature_status = '3'
+                if p.average_temperature < -20:
+                    temperature_status = '1'
+                if -20 <= p.average_temperature < 0:
+                    temperature_status = '2'
+                if 30 <= p.average_temperature < 50:
+                    temperature_status = '4'
+                if p.average_temperature >= 50:
+                    temperature_status = '5'
+
+                oxigen_status = '3'
+                if p.oxigen < 20:
+                    oxigen_status = '2'
+                if p.oxigen > 100:
+                    oxigen_status = '4'
+
+                co2_status = '3'
+                if p.co2 < 20:
+                    co2_status = '2'
+                if p.co2 > 100:
+                    co2_status = '4'
+
+                p.write({
+                    'temperature_status': temperature_status,
+                    'oxigen_status': oxigen_status, 'co2_status': co2_status,
+                })
+
                 planetary_changes.write({
                     'energy': p.energy,
                     'greenhouse': greenhouse,
@@ -218,7 +250,6 @@ class planet(models.Model):
      #   print(planets)
 
     def asteroid_collision(self):
-
         for p in self:
 
             p.write({
@@ -338,8 +369,17 @@ class travel(models.Model):
     @api.depends('origin_planet','destiny_planet')
     def _get_distance(self):
         for t in self:
-            t.distance = 100 # calcular
-            t.percent = 50.0
+            if (t.origin_planet and t.destiny_planet):
+                distance = abs(int(t.origin_planet.sun.coordinates) - int(t.destiny_planet.sun.coordinates))+0.1
+                t.distance = distance
+               # arrival = fields.Datetime.from_string(t.launch_time)+timedelta(hours=distance)
+                passed = datetime.now() - fields.Datetime.from_string(t.launch_time)
+
+                t.percent = 100*passed.seconds/(distance*3600)
+               # print(distance, arrival, passed, t.percent)
+            else:
+                t.distance = 0
+                t.percent = 0
 
 class construction(models.Model):
     _name = 'terraform.construction'
