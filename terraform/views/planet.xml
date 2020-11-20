@@ -237,9 +237,6 @@
             <field name="context">{'search_default_player_planet':1}</field>
         </record>
 
-
-
-
         <!-- Menu -->
 
         <menuitem name="Planets" id="terraform.menu_planets" parent="terraform.menu_1"

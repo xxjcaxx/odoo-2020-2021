@@ -24,21 +24,23 @@
 
     # always loaded
     'data': [
-         'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'views/views.xml',
         'views/player.xml',
         'views/planet.xml',
-'views/sun.xml',
-'views/buildings.xml',
-'views/travel.xml',
-'views/construction.xml',
+        'views/sun.xml',
+        'views/buildings.xml',
+        'views/travel.xml',
+        'views/construction.xml',
+        'views/challenges.xml',
         'views/templates.xml',
-'demo/templates.xml', 'demo/demo.xml',
-'views/cron.xml',
+
+        'demo/templates.xml', 'demo/demo.xml',
+        'views/cron.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
-       # 'demo/demo.xml',
+        # 'demo/demo.xml',
 
     ],
 }

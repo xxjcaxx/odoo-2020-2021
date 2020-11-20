@@ -1,0 +1,53 @@
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="terraform.challenge_form">
+            <field name="name">challenge Form</field>
+            <field name="model">terraform.challenge</field>
+            <field name="arch" type="xml">
+                <form string="challenge">
+                    <sheet>
+                        <group string="Challenge Parameters">
+                            <group>
+                                <field name="name"/>
+                                <field name="description"/>
+                            </group>
+                            <group>
+                                <field name="target_parameter"/>
+                                <field name="target_goal"/>
+                            </group>
+                        </group>
+                        <group string="Challenge Players">
+                            <group string="Player 1" col="4">
+                                <field name="player_1"/>
+                                <field name="player_1_avatar" widget="image" nolabel="1" attrs="{'invisible':[('player_1', '==', False)]}"/>
+                                <field name="planet_1"/>
+                                <field name="planet_1_image" widget="image" nolabel="1" attrs="{'invisible':[('planet_1', '==', False)]}"/>
+                            </group>
+                            <group string="Player 2" col="4">
+                                <field name="player_2"/>
+                                <field name="player_2_avatar" widget="image" nolabel="1" attrs="{'invisible':[('player_2', '==', False)]}"/>
+                                <field name="planet_2"/>
+                                <field name="planet_2_image" widget="image" nolabel="1" attrs="{'invisible':[('planet_2', '==', False)]}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="terraform.challenge_action_window">
+            <field name="name">challenges</field>
+            <field name="res_model">terraform.challenge</field>
+            <field name="view_mode">tree,form,kanban</field>
+        </record>
+
+
+        <!-- Menu -->
+
+        <menuitem name="Challenges" id="terraform.menu_challenges" parent="terraform.menu_1"
+                  action="terraform.challenge_action_window"/>
+
+
+    </data>
+</odoo>
