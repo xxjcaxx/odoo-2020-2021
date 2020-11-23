@@ -26,7 +26,7 @@
                             <field name="name"/>
                         </group>
                         <notebook><page string="Planets">
-                            <field name="planets">
+                            <field name="planets" context="{'default_player':active_id}">
                                 <kanban>
                                     <!--list of field to be loaded -->
                                     <field name="name" />
