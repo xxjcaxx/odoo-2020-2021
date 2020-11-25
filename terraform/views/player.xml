@@ -23,7 +23,7 @@
                     <sheet>
                         <group string="Personal Data">
                             <field name="avatar" widget="image"/>
-                            <field name="name"/>
+                            <field name="name"/><field name="password"/>
                         </group>
                         <notebook><page string="Planets">
                             <field name="planets" context="{'default_player':active_id}">

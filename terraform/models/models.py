@@ -23,6 +23,7 @@ class player(models.Model):
     _description = 'Human players'
     # Main fields
     name = fields.Char()
+    password = fields.Char()
     avatar = fields.Image(max_width=200, max_height=200)
     planets = fields.One2many('terraform.planet', 'player')
 
