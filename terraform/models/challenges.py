@@ -42,8 +42,8 @@ class challenge(models.Model):
                                }
                 }
         return {
-                'domain': {'planet_1': [('player', '=', self.player_1.id)],
-                           'player_2': [('id', '!=', self.player_1.id)]},
+             #   'domain': {'planet_1': [('player', '=', self.player_1.id)],
+              #             'player_2': [('id', '!=', self.player_1.id)]},
         }
 
     @api.onchange('player_2')
@@ -63,7 +63,10 @@ class challenge(models.Model):
         }
 
 
-
+    @api.onchange('target_goal')
+    def _onchange_goal(self):
+        if self.target_goal < 0:
+            self.target_goal = 0
 
     @api.constrains('player_1','player2','planet_1','planet_2')
     def _check_player_planets(self):
