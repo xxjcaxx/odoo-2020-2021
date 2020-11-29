@@ -128,12 +128,17 @@ class planet(models.Model):
                     death_plants_t = p.plants * 0.01
                     death_animals_t = p.animals * 0.01
                 # print(p.average_temperature, greenhouse, emission,p.average_temperature + greenhouse - emission)
+                final_temperature = p.average_temperature + greenhouse - emission
+                final_plants = p.plants + new_plants - plants_eated - death_plants_co2 - death_plants_t
+                final_animals =  p.animals + new_animals - death_animals_O - death_animals_t
+                final_co2 =  p.co2 - CO2_plants + CO2_animals
+                final_oxigen = p.oxigen + O_plants - O_animals
                 p.write({
-                    'average_temperature': p.average_temperature + greenhouse - emission,
-                    'plants': p.plants + new_plants - plants_eated - death_plants_co2 - death_plants_t,
-                    'animals': p.animals + new_animals - death_animals_O - death_animals_t,
-                    'co2': p.co2 - CO2_plants + CO2_animals,
-                    'oxigen': p.oxigen + O_plants - O_animals,
+                    'average_temperature': final_temperature,
+                    'plants': final_plants,
+                    'animals': final_animals,
+                    'co2': final_co2,
+                    'oxigen': final_oxigen,
                 })
                 temperature_status = '3'
                 if p.average_temperature < -20:
@@ -166,6 +171,11 @@ class planet(models.Model):
                     'energy': p.energy,
                     'greenhouse': greenhouse,
                     'emission': emission,
+                    'average_temperature': final_temperature,
+                    'plants': final_plants,
+                    'animals': final_animals,
+                    'co2': final_co2,
+                    'oxigen': final_oxigen,
                     'plants_co2_reduction': CO2_plants,
                     'plants_o_increment': O_plants,
                     'animals_co2_increment': CO2_animals,
@@ -436,6 +446,11 @@ class planetary_changes(models.Model):
     energy = fields.Float(digits=(12, 4))
     greenhouse = fields.Float(digits=(12, 4))
     emission = fields.Float(digits=(12, 4))
+    average_temperature = fields.Float()
+    oxigen = fields.Float()
+    co2 = fields.Float()
+    plants = fields.Float()
+    animals = fields.Float()
     plants_co2_reduction = fields.Float(digits=(12, 4))
     plants_o_increment = fields.Float(digits=(12, 4))
     animals_co2_increment = fields.Float(digits=(12, 4))

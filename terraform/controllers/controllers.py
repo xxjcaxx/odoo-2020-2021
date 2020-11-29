@@ -19,10 +19,10 @@ class Terraform(http.Controller):
      def terraform_object(self, model, obj, **kw):
          model = http.request.env[model].sudo().search([('id','=',obj)]).mapped(lambda p: p.read()[0])
          return model
-    ### Generic diguent el model
+    ### Generic diguent el model i criteris de busqueda
      @http.route('/terraform/terraform/<model>', auth='public',cors='*', type='json')
-     def terraform_model(self, model, **kw):
-         model = http.request.env[model].sudo().search([]).mapped(lambda p: p.read()[0])
+     def terraform_model_filter(self, model, f1,f2,f3 , **kw):
+         model = http.request.env[model].sudo().search([(f1,f2,f3)]).mapped(lambda p: p.read()[0])
          return model
 
     # Per a login
