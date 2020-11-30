@@ -388,7 +388,7 @@ class travel(models.Model):
                 # arrival = fields.Datetime.from_string(t.launch_time)+timedelta(hours=distance)
                 passed = datetime.now() - fields.Datetime.from_string(t.launch_time)
 
-                t.percent = 100 * passed.seconds / (distance * 3600)
+                t.percent = 100 * passed.total_seconds() / (distance * 3600)
             # print(distance, arrival, passed, t.percent)
             else:
                 t.distance = 0

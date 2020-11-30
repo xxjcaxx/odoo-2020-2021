@@ -1,6 +1,32 @@
 <odoo>
     <data>
+<record model="ir.ui.view" id="terraform.challenge_tree">
+            <field name="name">challenge tree</field>
+            <field name="model">terraform.challenge</field>
+            <field name="arch" type="xml">
+                <tree>
 
+                                <field name="name"/>
+                                <field name="description"/>
+
+                                <field name="target_parameter"/>
+                                <field name="target_goal"/>
+                                 <field name="start_date"/>
+                                 <field name="end_date"/>
+                                 <field name="winner"/>
+                                 <field name="finished"/>
+                                <field name="player_1"/>
+                                <field name="player_1_avatar" widget="image" nolabel="1" attrs="{'invisible':[('player_1', '==', False)]}"/>
+                                <field name="planet_1"/>
+                                <field name="planet_1_image" widget="image" nolabel="1" attrs="{'invisible':[('planet_1', '==', False)]}"/>
+                                <field name="player_2"/>
+                                <field name="player_2_avatar" widget="image" nolabel="1" attrs="{'invisible':[('player_2', '==', False)]}"/>
+                                <field name="planet_2"/>
+                                <field name="planet_2_image" widget="image" nolabel="1" attrs="{'invisible':[('planet_2', '==', False)]}"/>
+
+                </tree>
+            </field>
+        </record>
         <record model="ir.ui.view" id="terraform.challenge_form">
             <field name="name">challenge Form</field>
             <field name="model">terraform.challenge</field>
@@ -15,6 +41,10 @@
                             <group>
                                 <field name="target_parameter"/>
                                 <field name="target_goal"/>
+                                 <field name="start_date"/>
+                                 <field name="end_date"/>
+                                 <field name="winner"/>
+                                 <field name="finished"/>
                             </group>
                         </group>
                         <group string="Challenge Players">
@@ -36,10 +66,44 @@
             </field>
         </record>
 
+       <record model="ir.ui.view" id="terraform.challenge_search">
+            <field name="name">challenge search</field>
+            <field name="model">terraform.challenge</field>
+            <field name="arch" type="xml">
+                <search>
+
+                                <field name="name"/>
+                                <field name="description"/>
+
+                                <field name="target_parameter"/>
+                                <field name="target_goal"/>
+                                 <field name="start_date"/>
+                                 <field name="end_date"/>
+                                 <field name="winner"/>
+                                 <field name="finished"/>
+                                <field name="player_1"/>
+
+                                <field name="planet_1"/>
+                                <field name="player_2"/>
+                                <field name="planet_2"/>
+   <filter name="nofinished" string="Not finished" domain="[('finished','=',False)]" />
+                   <filter name="finished" string="Finished" domain="[('finished','=',True)]" />
+
+                     <filter name="group_by_player1" string="Gruop by player1" context="{'group_by': 'player_1'}"/>
+                    <filter name="group_by_player2" string="Gruop by player2" context="{'group_by': 'player_2'}"/>
+                </search>
+            </field>
+        </record>
+
+
+
+
+
         <record model="ir.actions.act_window" id="terraform.challenge_action_window">
             <field name="name">challenges</field>
             <field name="res_model">terraform.challenge</field>
             <field name="view_mode">tree,form,kanban</field>
+                <field name="context">{'search_default_nofinished':1}</field>
         </record>
 
 

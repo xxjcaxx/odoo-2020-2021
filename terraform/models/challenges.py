@@ -15,6 +15,7 @@ class challenge(models.Model):
     name = fields.Char()
     start_date = fields.Datetime(default=fields.Datetime.now)
     end_date = fields.Datetime(default=lambda d: fields.Datetime.to_string(datetime.now()+timedelta(hours=48)))
+    finished = fields.Boolean(default=False)
     player_1 = fields.Many2one('terraform.player', required=True, ondelete='restrict')
     player_2 = fields.Many2one('terraform.player', required=True, ondelete='restrict')
     planet_1 = fields.Many2one('terraform.planet', required=True, ondelete='restrict')
@@ -23,6 +24,7 @@ class challenge(models.Model):
     ### Challenge objective
     target_parameter = fields.Selection([('oxigen','Oxigen'),('co2','CO2'),('water','Water'),('plants','Plants'),('animals','Animals')])
     target_goal = fields.Float()
+    winner = fields.Many2one('terraform.player', ondelete='restrict', readonly=True)
 
     #### aux fields
     player_1_avatar = fields.Image(related='player_1.avatar_small')
@@ -42,8 +44,8 @@ class challenge(models.Model):
                                }
                 }
         return {
-             #   'domain': {'planet_1': [('player', '=', self.player_1.id)],
-              #             'player_2': [('id', '!=', self.player_1.id)]},
+                'domain': {'planet_1': [('player', '=', self.player_1.id)],
+                           'player_2': [('id', '!=', self.player_1.id)]},
         }
 
     @api.onchange('player_2')
@@ -79,5 +81,22 @@ class challenge(models.Model):
                 raise ValidationError('Planet 2 is not from player 2')
 
 
-
+    @api.model
+    def calculate_challenges(self):
+        challenges = self.search([('finished','=',False)]).filtered(lambda c: c.end_date < fields.Datetime.now())
+        for c in challenges:
+            planet1 = c.planet_1
+            planet2 = c.planet_2
+            goal = c.target_goal
+            parameter = c.target_parameter
+            winner = False
+            print(c, planet1, planet2)
+            planet1_diference = abs(planet1[parameter]-goal)
+            planet2_diference = abs(planet2[parameter]-goal)
+            print(c,planet1_diference,planet2_diference)
+            if planet1_diference > planet2_diference:
+                winner = planet2.player.id
+            else:
+                winner = planet1.player.id
+            c.write({'finished':True,'winner':winner})
 
