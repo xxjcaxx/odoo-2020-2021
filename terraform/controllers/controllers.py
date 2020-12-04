@@ -22,6 +22,7 @@ class Terraform(http.Controller):
     ### Generic diguent el model i criteris de busqueda
      @http.route('/terraform/terraform/<model>', auth='public',cors='*', type='json')
      def terraform_model_filter(self, model, f1,f2,f3 , **kw):
+         print(model,f1,f2,f3,http.request.env[model].sudo().search([(f1,f2,f3)]))
          model = http.request.env[model].sudo().search([(f1,f2,f3)]).mapped(lambda p: p.read()[0])
          return model
 
@@ -33,6 +34,14 @@ class Terraform(http.Controller):
             return {"login":"si"}
         else:
             return {"login":"no"}
+
+    # Per a crear coses
+     @http.route('/terraform/terraform/create/travel', auth='public', cors='*', type='json')
+     def terraform_model_create(self, p1, p2, player, **kw):
+        travel = http.request.env['terraform.travel'].sudo().create({'origin_planet':p1, 'destiny_planet': p2, 'player':player})
+        return travel.read()[0]
+
+
     ### per a players passant el id:
      # @http.route('/terraform/terraform/players/<model("terraform.player"):obj>/', auth='public',cors='*')
      # def player(self, obj, **kw):
