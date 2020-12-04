@@ -22,7 +22,8 @@ class Terraform(http.Controller):
     ### Generic diguent el model i criteris de busqueda
      @http.route('/terraform/terraform/<model>', auth='public',cors='*', type='json')
      def terraform_model_filter(self, model, f1,f2,f3 , **kw):
-         print(model,f1,f2,f3,http.request.env[model].sudo().search([(f1,f2,f3)]))
+         travel =  http.request.env[model].sudo().search([(f1,f2,f3)])
+         print(model,f1,f2,f3, travel, http.request.env[model].sudo().search([]))
          model = http.request.env[model].sudo().search([(f1,f2,f3)]).mapped(lambda p: p.read()[0])
          return model
 
