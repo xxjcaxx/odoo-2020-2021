@@ -22,10 +22,20 @@ class Terraform(http.Controller):
     ### Generic diguent el model i criteris de busqueda
      @http.route('/terraform/terraform/<model>', auth='public',cors='*', type='json')
      def terraform_model_filter(self, model, f1,f2,f3 , **kw):
-         travel =  http.request.env[model].sudo().search([(f1,f2,f3)])
-         print(model,f1,f2,f3, travel, http.request.env[model].sudo().search([]))
-         model = http.request.env[model].sudo().search([(f1,f2,f3)]).mapped(lambda p: p.read()[0])
+         records =  http.request.env[model].sudo().search([(f1,f2,f3)])
+        # print(model,f1,f2,f3, travel, http.request.env[model].sudo().search([]))
+         model = records.mapped(lambda p: p.read()[0])
          return model
+
+         ### Generic diguent el model i criteris de busqueda
+
+
+     @http.route('/terraform/terraform/name_id/<model>', auth='public', cors='*', type='json')
+     def terraform_name_id_filter(self, model, f1, f2, f3, **kw):
+        records = http.request.env[model].sudo().search([(f1, f2, f3)])
+        # print(model,f1,f2,f3, travel, http.request.env[model].sudo().search([]))
+        model = records.mapped(lambda p: p.read(['id','name'])[0])
+        return model
 
     # Per a login
      @http.route('/terraform/terraform/login', auth='public', cors='*', type='json')
@@ -41,6 +51,12 @@ class Terraform(http.Controller):
      def terraform_model_create(self, p1, p2, player, **kw):
         travel = http.request.env['terraform.travel'].sudo().create({'origin_planet':p1, 'destiny_planet': p2, 'player':player})
         return travel.read()[0]
+
+
+     @http.route('/terraform/terraform/<model>/create', auth='public', cors='*', type='json')
+     def terraform_model_create(self, model, data, **kw):
+        new_id = http.request.env[model].sudo().create(data)
+        return new_id.read()[0]
 
 
     ### per a players passant el id:
