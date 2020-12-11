@@ -25,7 +25,7 @@
                             <field name="origin_planet"/>
                             <field name="destiny_planet"/>
                             <field name="distance"/>
-                            <field name="percent" widget="percentpie"/>
+                            <field name="percent" widget="percentpie"/><field name="finished"/>
                             <field name="launch_time"/>
                         </group>
                     </sheet>

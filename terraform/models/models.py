@@ -373,6 +373,7 @@ class travel(models.Model):
     distance = fields.Float(compute='_get_distance')  # Distancia en temps
     percent = fields.Float(compute='_get_distance')
     launch_time = fields.Datetime(default=lambda t: fields.Datetime.now())
+    finished = fields.Boolean(default=False)
 
     @api.depends('origin_planet', 'destiny_planet', 'player')
     def _get_name(self):
@@ -389,11 +390,17 @@ class travel(models.Model):
                 passed = datetime.now() - fields.Datetime.from_string(t.launch_time)
 
                 t.percent = 100 * passed.total_seconds() / (distance * 3600)
+                if t.percent >= 100:
+                    t.percent = 100
+                    t.write({'finished':True})
             # print(distance, arrival, passed, t.percent)
             else:
                 t.distance = 0
                 t.percent = 0
-
+    @api.model
+    def update_travels(self):
+        for t in self.search([('finished','=',False)]):
+            print(t)
 
 class construction(models.Model):
     _name = 'terraform.construction'
