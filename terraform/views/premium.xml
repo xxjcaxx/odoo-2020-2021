@@ -1,0 +1,20 @@
+<odoo>
+  <data>
+
+      <record model="ir.ui.view" id="terraform.player_premium_form">
+            <field name="name">Player Premium Form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="terraform.player_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Premium">
+                        <group>
+                         <field name="is_premium"/>
+                        </group>
+                    </page>
+                    <field name="is_premium"/>
+                </notebook>
+            </field>
+</record>
+  </data>
+</odoo>

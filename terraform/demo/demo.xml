@@ -1,6 +1,6 @@
 <odoo>
     <data>
-          <record id="terraform.player_1" model="terraform.player">
+          <record id="terraform.player_1" model="res.partner">
             <field name="name">Michael</field>
            <field name="avatar">iVBORw0KGgoAAAANSUhEUgAAAWgAAAFoCAYAAAB65WHVAAABhGlDQ1BJQ0MgcHJvZmlsZQAAKJF9
 kT1Iw0AcxV9TpX5UHNpBxCFgdbIgKuKoVShChVArtOpgcukXNGlIUlwcBdeCgx+LVQcXZ10dXAVB

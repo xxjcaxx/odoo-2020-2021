@@ -1,0 +1,226 @@
+<odoo>
+    <data>
+        
+
+        <record model="ir.ui.view" id="terraform.satelit_tree">
+            <field name="name">satelit tree</field>
+            <field name="model">terraform.satelit</field>
+            <field name="arch" type="xml">
+                <tree decoration-danger="average_temperature>50" decoration-info="average_temperature&lt;0">
+                    <field name="image_small" widget="image"/>
+                    <field name="name"/>
+                    <field name="player"/>
+                    <field name="planet"/>
+                    <field name="n_planet"/>
+                    <field name="sun"/>
+                    <field name="average_temperature"/>
+                     <field name="temperature_status" />
+                    <field name="oxigen"/>
+                    <field name="co2"/>
+                    <field name="water"/>
+                    <field name="energy"/>
+                    <field name="gravity"/>
+                    <field name="air_density"/>
+                    <field name="plants"/>
+                    <field name="animals"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="terraform.satelit_form">
+            <field name="name">satelit Form</field>
+            <field name="model">terraform.satelit</field>
+            <field name="arch" type="xml">
+                <form string="satelit">
+                    <header>
+                            <field name="temperature_status" widget="statusbar"/>
+                        </header>
+                       <header>
+                        <field name="oxigen_status" widget="statusbar"/>
+                        </header>
+                       <header>
+                         <field name="co2_status" widget="statusbar"/>
+                        </header>
+                    <sheet>
+                        <field name="image" widget="image"/>
+                        <group string="Global Data">
+                            <group>
+                                <field name="name"/>
+                                <field name="player"/>
+                                 <field name="planet"/>
+                                <field name="n_planet"/>
+                                <separator string="Description"/>
+                                <field name="sun"/>
+                                <field name="average_temperature"/>
+                                <field name="oxigen"/>
+                            </group>
+                            <group>
+                                <field name="co2"/>
+                                <field name="water"/>
+
+                                <field name="energy"/>
+                                <field name="gravity"/>
+                                <field name="air_density"/>
+                                <field name="plants"/>
+                                <field name="animals"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Buildings">
+                                <field name="buildings" context="{'default_satelit':active_id}">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="people"/>
+                                        <field name="energy"/>
+                                        <field name="percent_energy"/>
+                                        <field name="activo"/>
+                                        <button type="object" class="oe_stat_button" icon="fa-bolt" name="activate">
+                                        </button>
+                                    </tree>
+                                </field>
+                                <separator string="Construction"/>
+                                <field name="construction_buildings"/>
+                            </page>
+                            <page string="Available Buildings">
+                                <field name="available_buildings">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="max_people"/>
+                                        <field name="energy_production"/>
+                                        <field name="oxigen_production"/>
+                                        <field name="co2_production"/>
+                                        <field name="water_production"/>
+                                        <field name="heat_production"/>
+
+                                        <field name="time"/>
+
+                                        <button name="build" type="object" string="Build" class="oe_highlight" context="{'satelit':parent.id}"/>
+
+                                    </tree>
+                                </field>
+                            </page>
+                         <!--    <page string="satelitary Changes">
+                                <field name="satelitary_changes">
+                                    <tree limit="10">
+                                        <field name="name"/>
+                                        <field name="energy"/>
+                                        <field name="greenhouse"/>
+                                        <field name="emission"/>
+                                        <field name="plants_co2_reduction"/>
+                                        <field name="plants_o_increment"/>
+                                        <field name="animals_co2_increment"/>
+                                        <field name="animals_o_reduction"/>
+                                        <field name="new_animals"/>
+                                        <field name="new_plants"/>
+                                        <field name="plants_eated"/>
+                                        <field name="dead_animals_o"/>
+                                        <field name="dead_plants_co2"/>
+                                        <field name="dead_animals_temperature"/>
+                                        <field name="dead_plants_temperature"/>
+                                    </tree>
+                                </field>
+
+
+                            </page> -->
+                               <page string="Disasters">
+                                <field name="disasters">
+                                    <tree limit="10">
+                                        <field name="name"/>
+                                        <field name="time"/>
+
+                                    </tree>
+                                </field>
+
+                            </page>
+                            <page string="People">
+                                <button name="send_people" type="object" string="Send People" class="oe_highlight" />
+                            </page>
+
+                        </notebook>
+                        <footer>
+                            <button name="calculate_production" type="object" string="Calculate Production" class="oe_highlight" />
+                             <button name="asteroid_collision" type="object" string="Asteroid Collision" class="oe_highlight" />
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="terraform.satelit_kanban_view">
+            <field name="name">satelit kanban</field>
+            <field name="model">terraform.satelit</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <!--list of field to be loaded -->
+                    <field name="name" />
+                    <field name="id" /> <!-- És important afegir el id per al record.id.value -->
+                    <field name="image" />
+                    <field name="player"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_product_vignette">
+                                <a type="open">
+                                    <img class="o_image_64_contain"
+                                         t-att-alt="record.name.value"
+
+                                         t-att-src="kanban_image('terraform.satelit', 'image', record.id.raw_value)" />
+                                </a>
+                                <div class="oe_product_desc">
+                                    <h4>
+                                        <a type="edit">
+                                            <field name="id"></field>
+                                            <field name="name"></field>
+                                            <field name="player"></field>
+                                        </a>
+                                    </h4>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="terraform.satelit_search">
+            <field name="name">satelit search</field>
+            <field name="model">terraform.satelit</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="player"/>
+                    <field name="n_planet"/>
+                    <field name="sun"/>
+                    <field name="average_temperature"/>
+                    <field name="oxigen" filter_domain="[('oxigen','>=',self-1),('oxigen','&lt;=',self+1)]"/>
+                    <field name="co2" filter_domain="[('co2','>=',self-1),('co2','&lt;=',self+1)]"/>
+                    <field name="water"/>
+
+                    <field name="energy"/>
+                    <field name="gravity"/>
+                    <field name="air_density"/>
+                    <filter name="life_temperature" string="Live Temperature" domain="[('average_temperature','>',0),('average_temperature','&lt;',50)]" />
+                    <filter name="player_satelit" string="satelits with player" domain="[('player','!=',False)]" />
+                    <filter name="group_by_sun" string="Gruop by Sun" context="{'group_by': 'sun'}"/>
+                    <filter name="group_by_player" string="Gruop by Player" context="{'group_by': 'player'}"/>
+
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="terraform.satelit_action_window">
+            <field name="name">satelits</field>
+            <field name="res_model">terraform.satelit</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="context">{'search_default_player_satelit':1}</field>
+        </record>
+
+        <!-- Menu -->
+
+        <menuitem name="satelits" id="terraform.menu_satelits" parent="terraform.menu_1"
+                  action="terraform.satelit_action_window"/>
+
+
+    </data>
+</odoo>

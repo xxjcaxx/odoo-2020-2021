@@ -16,15 +16,15 @@ class challenge(models.Model):
     start_date = fields.Datetime(default=fields.Datetime.now)
     end_date = fields.Datetime(default=lambda d: fields.Datetime.to_string(datetime.now()+timedelta(hours=48)))
     finished = fields.Boolean(default=False)
-    player_1 = fields.Many2one('terraform.player', required=True, ondelete='restrict')
-    player_2 = fields.Many2one('terraform.player', required=True, ondelete='restrict')
+    player_1 = fields.Many2one('res.partner', required=True, ondelete='restrict')
+    player_2 = fields.Many2one('res.partner', required=True, ondelete='restrict')
     planet_1 = fields.Many2one('terraform.planet', required=True, ondelete='restrict')
     planet_2 = fields.Many2one('terraform.planet', required=True, ondelete='restrict')
     description = fields.Text()
     ### Challenge objective
     target_parameter = fields.Selection([('oxigen','Oxigen'),('co2','CO2'),('water','Water'),('plants','Plants'),('animals','Animals')])
     target_goal = fields.Float()
-    winner = fields.Many2one('terraform.player', ondelete='restrict', readonly=True)
+    winner = fields.Many2one('res.partner', ondelete='restrict', readonly=True)
 
     #### aux fields
     player_1_avatar = fields.Image(related='player_1.avatar_small')

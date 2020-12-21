@@ -3,7 +3,7 @@
 
         <record model="ir.ui.view" id="terraform.player_tree">
             <field name="name">Player tree</field>
-            <field name="model">terraform.player</field>
+            <field name="model">res.partner</field>
             <field name="arch" type="xml">
                 <tree>
                     <field name="avatar_small" widget="image"/>
@@ -17,7 +17,7 @@
 
         <record model="ir.ui.view" id="terraform.player_form">
             <field name="name">Player Form</field>
-            <field name="model">terraform.player</field>
+            <field name="model">res.partner</field>
             <field name="arch" type="xml">
                 <form string="Player">
                     <sheet>
@@ -80,10 +80,78 @@
         </record>
 
 
+         <record model="ir.ui.view" id="terraform.player_inherit_form">
+            <field name="name">Player inherit Form</field>
+            <field name="model">res.partner</field>
+              <field name="inherit_id" ref="base.view_partner_form"/>
+             <field name="arch" type="xml">
+                 <notebook position="inside">
+                     <page string="Player">
+                      <group string="Personal Data">
+                            <field name="avatar" widget="image"/>
+                          <field name="is_player"/>
+                            <field name="password"/>
+                        </group>
+                        <notebook><page string="Planets">
+                            <field name="planets" context="{'default_player':active_id}">
+                                <kanban>
+                                    <!--list of field to be loaded -->
+                                    <field name="name" />
+                                    <field name="id" /> <!-- És important afegir el id per al record.id.value -->
+                                    <field name="image" />
+                                    <field name="player"/>
+                                    <templates>
+                                        <t t-name="kanban-box">
+                                            <div class="oe_product_vignette" style="overflow: hidden;">
+                                                <div style="float:left">
+                                                <a type="open">
+                                                    <img class="o_image_64_contain"
+                                                         t-att-alt="record.name.value"
+                                                         t-att-src="kanban_image('terraform.planet', 'image', record.id.raw_value)" />
+                                                </a>
+                                                <div class="oe_product_desc">
+                                                    <h4>
+                                                        <a type="edit"  context="{'target':'current'}" >
+                                                            <field name="name"></field>
+                                                        </a>
+                                                    </h4>
+                                                    <button name="open" type="object" string="Open" class="btn btn-primary" >Open</button>
+
+                                                    </div>
+
+
+                                                </div>
+                                                <div style=" float:right">
+                                                        <span style="display:block">🌡 <field name="average_temperature" help="Average Temperature"/></span>
+                                                        <span style="display:block">🌬 <field name="oxigen"/></span>
+                                                        <span style="display:block">CO2 <field name="co2"/></span>
+                                                        <span style="display:block">🏋 <field name="gravity"/></span>
+                                                        <span style="display:block">☁ <field name="air_density"/></span>
+                                                        <span style="display:block">⚡ <field name="energy"/></span>
+
+                                                        <span style="display:block">💧 <field name="water"/></span>
+                                                    </div>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
+                            </field>
+                            <button name="assign_random_planet" type="object" string="Assign Random Planet" class="oe_highlight" />
+
+
+                        </page></notebook>
+                     </page>
+                 </notebook>
+             </field>
+         </record>
+
+
         <record model="ir.actions.act_window" id="terraform.player_action_window">
             <field name="name">Players</field>
-            <field name="res_model">terraform.player</field>
+            <field name="res_model">res.partner</field>
             <field name="view_mode">tree,form,kanban</field>
+            <field name="domain"> [('is_player','=',True)]</field>
+            <field name="context">{'default_is_player': True}</field>
         </record>
 
         <!-- Menu -->

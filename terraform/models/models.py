@@ -19,10 +19,13 @@ def name_generator():
 
 
 class player(models.Model):
-    _name = 'terraform.player'
+    _inherit='res.partner'
+    _name = 'res.partner'
+    #_name = 'res.partner'
     _description = 'Human players'
     # Main fields
-    name = fields.Char()
+   # name = fields.Char()
+    is_player = fields.Boolean()
     password = fields.Char()
     avatar = fields.Image(max_width=200, max_height=200)
     planets = fields.One2many('terraform.planet', 'player')
@@ -41,7 +44,7 @@ class player(models.Model):
                 'planet': planeta.id
             })
 
-    _sql_constraints = [('name_uniq', 'unique(name)', 'Name must be unique'), ]
+   # _sql_constraints = [('name_uniq', 'unique(name)', 'Name must be unique'), ]
 
 
 class planet(models.Model):
@@ -49,7 +52,7 @@ class planet(models.Model):
     _description = 'Planets to terraform'
     # Main Fields
     name = fields.Char()
-    player = fields.Many2one('terraform.player')
+    player = fields.Many2one('res.partner')
     n_planet = fields.Integer()  # n planet from sun
     sun = fields.Many2one('terraform.sun', ondelete='cascade')
     image = fields.Image(max_width=200, max_height=200)
@@ -367,7 +370,7 @@ class travel(models.Model):
     _description = 'Travel to other planets'
 
     name = fields.Char(compute='_get_name')
-    player = fields.Many2one('terraform.player', ondelete='cascade', required=True)
+    player = fields.Many2one('res.partner', ondelete='cascade', required=True)
     origin_planet = fields.Many2one('terraform.planet', ondelete='cascade', required=True)
     destiny_planet = fields.Many2one('terraform.planet', ondelete='cascade', required=True)
     distance = fields.Float(compute='_get_distance')  # Distancia en temps

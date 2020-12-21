@@ -37,6 +37,8 @@
 
         'demo/templates.xml', 'demo/demo.xml',
         'views/cron.xml',
+'views/satelit.xml',
+'views/premium.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
