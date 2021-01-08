@@ -145,13 +145,27 @@
              </field>
          </record>
 
+        <record model="ir.ui.view" id="terraform.player_search">
+            <field name="name">Player search</field>
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml">
+                <search>
+                    <filter name="player_partner" string="Is Player" domain="[('is_player','=',True)]" />
+                </search>
+            </field>
+        </record>
+
 
         <record model="ir.actions.act_window" id="terraform.player_action_window">
             <field name="name">Players</field>
             <field name="res_model">res.partner</field>
             <field name="view_mode">tree,form,kanban</field>
-            <field name="domain"> [('is_player','=',True)]</field>
-            <field name="context">{'default_is_player': True}</field>
+           <!--  <field name="domain"> [('is_player','=',True)]</field> -->
+            <field name="domain"></field>
+            <field name="context">{'default_is_player': True, 'search_default_player_partner': 1}</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('terraform.player_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('terraform.player_form')}),]" />
         </record>
 
         <!-- Menu -->
