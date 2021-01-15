@@ -24,8 +24,10 @@
                         <group string="Personal Data">
                             <field name="avatar" widget="image"/>
                             <field name="name"/><field name="password"/>
+                            <field name="is_player"/>
                         </group>
-                        <notebook><page string="Planets">
+                        <notebook>
+                            <page string="Planets">
                             <field name="planets" context="{'default_player':active_id}">
                                 <kanban>
                                     <!--list of field to be loaded -->
@@ -72,7 +74,12 @@
                             <button name="assign_random_planet" type="object" string="Assign Random Planet" class="oe_highlight" />
 
 
-                        </page></notebook>
+                        </page>
+                            <page string="Travels">
+                                <field name="travels"></field>
+                                 <button name="%(terraform.launch_travel_wizard)d" type="action" string="Launch Travel" class="oe_highlight" />
+                            </page>
+                        </notebook>
 
                     </sheet>
                 </form>
@@ -162,7 +169,8 @@
             <field name="view_mode">tree,form,kanban</field>
            <!--  <field name="domain"> [('is_player','=',True)]</field> -->
             <field name="domain"></field>
-            <field name="context">{'default_is_player': True, 'search_default_player_partner': 1}</field>
+            <field name="context">{'default_is_player': True,
+                'search_default_player_partner': 1}</field>
             <field name="view_ids" eval="[(5, 0, 0),
             (0, 0, {'view_mode': 'tree', 'view_id': ref('terraform.player_tree')}),
             (0, 0, {'view_mode': 'form', 'view_id': ref('terraform.player_form')}),]" />

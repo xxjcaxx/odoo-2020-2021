@@ -29,11 +29,18 @@ class player(models.Model):
     password = fields.Char()
     avatar = fields.Image(max_width=200, max_height=200)
     planets = fields.One2many('terraform.planet', 'player')
+    travels = fields.Many2many('terraform.travel', compute='get_travels')
 
     # Aux fields
     avatar_small = fields.Image(max_width=50, max_height=50, related='avatar', store=True)
 
+    def get_travels(self):
+        for player in self:
+            player.travels = self.env['terraform.travel'].search([('player','=',player.id)])
+
+
     def assign_random_planet(self):
+        planets = []
         for p in self:
             planetes = self.env['terraform.planet'].search([('player', '=', False)]).ids
             planeta = self.env['terraform.planet'].browse(random.choice(planetes))
@@ -43,6 +50,8 @@ class player(models.Model):
                 'people': self.env.ref('terraform.b_type_life_support').max_people,
                 'planet': planeta.id
             })
+            planets.append(planeta)
+        return planets
 
    # _sql_constraints = [('name_uniq', 'unique(name)', 'Name must be unique'), ]
 
@@ -404,6 +413,45 @@ class travel(models.Model):
     def update_travels(self):
         for t in self.search([('finished','=',False)]):
             print(t)
+
+class travel_wizard(models.TransientModel):
+    _name = 'terraform.travel_wizard'
+
+    def _default_player(self):
+        return self.env['res.partner'].browse(self._context.get('active_id'))  # El context conté, entre altre coses,
+        # el active_id del model que està obert.
+    player = fields.Many2one('res.partner', required=True, default=_default_player , domain="[('is_player', '=', True)]")
+    origin_planet = fields.Many2one('terraform.planet', ondelete='cascade', required=True)
+    destiny_planet = fields.Many2one('terraform.planet', ondelete='cascade', required=True)
+    distance = fields.Float(compute='_get_distance')  # Distancia en temps
+
+    @api.onchange('player')
+    def onchange_player(self):
+        return {
+            'domain': {'origin_planet': [('player', '=', self.player.id)]},
+        }
+
+    @api.onchange('origin_planet')
+    def onchange_planet(self):
+        return {
+            'domain': {'destiny_planet': [('id', '!=', self.origin_planet.id)]},
+        }
+
+    @api.depends('origin_planet', 'destiny_planet')
+    def _get_distance(self):
+        for t in self:
+            if (t.origin_planet and t.destiny_planet):
+                distance = abs(int(t.origin_planet.sun.coordinates) - int(t.destiny_planet.sun.coordinates)) + 0.1
+                t.distance = distance
+            else:
+                t.distance = 0
+
+    def create_travel(self):
+        self.env['terraform.travel'].create({
+            'player': self.player.id,
+            'origin_planet': self.origin_planet.id,
+            'destiny_planet': self.destiny_planet.id
+        })
 
 class construction(models.Model):
     _name = 'terraform.construction'

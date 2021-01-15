@@ -1,0 +1,69 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="terraform.planet_wizard_form">
+            <field name="name">planet wizard Form</field>
+            <field name="model">terraform.planet_wizard</field>
+            <field name="arch" type="xml">
+                <form string="Planet">
+                    <header>
+                        <field name="state" widget="statusbar"></field>
+                    </header>
+                    <sheet>
+                        <field name="image" widget="image"/>
+                        <group string="Global Data">
+                            <group states="global">
+                                <field name="name"/>
+                                <field name="player"/>
+                                <field name="n_planet"/>
+                                <field name="sun"/>
+                            </group>
+                            <group states="enviroment">
+                                <field name="average_temperature"/>
+                                <field name="oxigen"/>
+                                <field name="co2"/>
+                                <field name="water"/>
+
+                                <field name="energy"/>
+                                <field name="gravity"/>
+                                <field name="air_density"/>
+                                <field name="plants"/>
+                                <field name="animals"/>
+                            </group>
+                        </group>
+                        <notebook states="buildings">
+                            <page string="Buildings">
+                                <field name="buildings" context="{'default_planet':active_id}">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="people"/>
+                                        <field name="energy"/>
+                                        <field name="percent_energy"/>
+                                        <field name="activo"/>
+                                        <button type="object" class="oe_stat_button" icon="fa-bolt" name="activate">
+                                        </button>
+                                    </tree>
+                                </field>
+
+                            </page>
+                        </notebook>
+                        <footer>
+                            <button name="create_planety" type="object"
+                                    string="Create" class="oe_highlight"/>
+                            or
+                            <button special="cancel" string="Cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+         <act_window id="terraform.launch_planet_wizard"
+                    name="Planet Wizard"
+                    binding_model="terraform.sun"
+                    res_model="terraform.planet_wizard"
+                    view_mode="form"
+                    target="new"
+        />
+
+    </data>
+</odoo>

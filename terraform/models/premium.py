@@ -11,5 +11,8 @@ class player_premium(models.Model):
 
     def assign_random_planet(self):
         for p in self:
-            super(player_premium, self).assign_random_planet()
+            planets = super(player_premium, p).assign_random_planet()
+            if p.is_premium:
+                for planet in planets:
+                    planet.write({'oxigen':50,'co2':50,'water':50,'average_temperature':25})
 

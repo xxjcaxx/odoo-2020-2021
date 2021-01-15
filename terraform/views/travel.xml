@@ -45,6 +45,36 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="terraform.travel_wizard_form">
+            <field name="name">travel wizard Form</field>
+            <field name="model">terraform.travel_wizard</field>
+            <field name="arch" type="xml">
+                <form string="travel">
+                    <sheet>
+                        <group string="">
+                            <field name="player"/>
+                            <field name="origin_planet"/>
+                            <field name="destiny_planet"/>
+                            <field name="distance"/>
+                        </group>
+                        <footer>
+                            <button name="create_travel" type="object"
+                                    string="Create" class="oe_highlight"/>
+                            or
+                            <button special="cancel" string="Cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <act_window id="terraform.launch_travel_wizard"
+                    name="Launch travel"
+                    binding_model="res.partner"
+                    res_model="terraform.travel_wizard"
+                    view_mode="form"
+                    target="new"
+        />
 
         <record model="ir.actions.act_window" id="terraform.travel_action_window">
             <field name="name">travels</field>

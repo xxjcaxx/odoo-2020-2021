@@ -28,6 +28,7 @@
         'views/views.xml',
         'views/player.xml',
         'views/planet.xml',
+        'views/wizard_planet.xml',
         'views/sun.xml',
         'views/buildings.xml',
         'views/travel.xml',
@@ -39,6 +40,7 @@
         'views/cron.xml',
 'views/satelit.xml',
 'views/premium.xml',
+
     ],
     # only loaded in demonstration mode
     'demo': [
