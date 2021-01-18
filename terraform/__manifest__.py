@@ -26,20 +26,21 @@
     'data': [
         'security/ir.model.access.csv',
         'views/views.xml',
+        'views/travel.xml',
         'views/player.xml',
         'views/planet.xml',
         'views/wizard_planet.xml',
         'views/sun.xml',
         'views/buildings.xml',
-        'views/travel.xml',
+
         'views/construction.xml',
         'views/challenges.xml',
         'views/templates.xml',
 
         'demo/templates.xml', 'demo/demo.xml',
         'views/cron.xml',
-'views/satelit.xml',
-'views/premium.xml',
+        'views/satelit.xml',
+        'views/premium.xml',
 
     ],
     # only loaded in demonstration mode

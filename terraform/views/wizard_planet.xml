@@ -10,6 +10,7 @@
                     </header>
                     <sheet>
                         <field name="image" widget="image"/>
+                        <field name="images_template"/>
                         <group string="Global Data">
                             <group states="global">
                                 <field name="name"/>
@@ -30,34 +31,44 @@
                                 <field name="animals"/>
                             </group>
                         </group>
-                        <notebook states="buildings">
-                            <page string="Buildings">
-                                <field name="buildings" context="{'default_planet':active_id}">
-                                    <tree>
-                                        <field name="name"/>
-                                        <field name="people"/>
-                                        <field name="energy"/>
-                                        <field name="percent_energy"/>
-                                        <field name="activo"/>
-                                        <button type="object" class="oe_stat_button" icon="fa-bolt" name="activate">
-                                        </button>
-                                    </tree>
-                                </field>
+                        <notebook states="buildings"><page string="buildings">
+                            <separator string="Available Buildings" />
+                            <field name="buildings">
+                                <tree>
+                                    <field name="name"/>
+                                    <button name="add" type="object"
+                                            string="Add" class="oe_highlight"
+                                            context="{'planet_wizard':parent.id}"/>
+                                </tree>
+                            </field>
 
-                            </page>
-                        </notebook>
-                        <footer>
-                            <button name="create_planety" type="object"
+                            <group string="Select building type">
+                                <group><field name="buildings_aux"/></group>
+                                <group><button name="add_building" type="object" string="Add" class="oe_highlight"/></group>
+
+                            </group>
+                            <separator string="Buildings" />
+                            <field name="buildings_new" context="{'default_planet_wizard': id}">
+
+                            </field>
+
+                        </page></notebook>
+                        <footer >
+                            <button states="enviroment,buildings" name="previous" type="object"
+                                    string="Previous" class="oe_highlight"/>
+                            <button states="global,enviroment" name="next" type="object"
+                                    string="Next" class="oe_highlight"/>
+
+                            <button states="buildings" name="create_planet" type="object"
                                     string="Create" class="oe_highlight"/>
-                            or
-                            <button special="cancel" string="Cancel"/>
+                            <button states="global, enviroment ,buildings" special="cancel" string="Cancel"/>
                         </footer>
                     </sheet>
                 </form>
             </field>
         </record>
 
-         <act_window id="terraform.launch_planet_wizard"
+        <act_window id="terraform.launch_planet_wizard"
                     name="Planet Wizard"
                     binding_model="terraform.sun"
                     res_model="terraform.planet_wizard"
