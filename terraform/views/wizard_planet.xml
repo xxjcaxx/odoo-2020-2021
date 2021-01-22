@@ -19,6 +19,7 @@
                                 <field name="sun"/>
                             </group>
                             <group states="enviroment">
+                                <field name="livability"/>
                                 <field name="average_temperature"/>
                                 <field name="oxigen"/>
                                 <field name="co2"/>
@@ -34,13 +35,27 @@
                         <notebook states="buildings"><page string="buildings">
                             <separator string="Available Buildings" />
                             <field name="buildings">
-                                <tree>
-                                    <field name="name"/>
-                                    <button name="add" type="object"
-                                            string="Add" class="oe_highlight"
-                                            context="{'planet_wizard':parent.id}"/>
-                                </tree>
-                            </field>
+                            <kanban>
+                                <!--list of field to be loaded -->
+                                <field name="name" />
+                                <field name="id" /> <!-- És important afegir el id per al record.id.value -->
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div style="-webkit-box-flex: 0; flex: none; width: 100px; min-width:100px; margin: 0px; border: 1px solid #aaa;">
+                                            <div >
+                                                <h4>
+                                                        <field name="name"></field>
+                                                </h4>
+                                                <button name="add" type="object"
+                                                class="btn btn-primary"
+                                                 context="{'planet_wizard':parent.id}"
+                                                >Add</button>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                                 </field>
 
                             <group string="Select building type">
                                 <group><field name="buildings_aux"/></group>

@@ -17,6 +17,7 @@ class planet_wizard(models.TransientModel):
         # el active_id del model que està obert.
     sun = fields.Many2one('terraform.sun', default=_default_sun, readonly=True)
     image = fields.Image(max_width=200, max_height=200)
+    livability = fields.Integer()
     average_temperature = fields.Float()
     oxigen = fields.Float()
     co2 = fields.Float()
@@ -64,6 +65,16 @@ class planet_wizard(models.TransientModel):
         if len(self.env['terraform.planet'].search([('name','=',name)])) > 0:
             self.name = name+"_new"
             return({'warning': {'title': "Name Repeated", 'message': "The name is repeated", 'type': 'notification'},})
+
+    @api.onchange('livability')
+    def onchange_livability(self):
+        liv = self.livability/10+0.0001 # Pot ser de 0 a 100 i cal transformarla de 0 a 10
+        self.average_temperature = random.betavariate(liv,liv)*50
+        self.oxigen = random.betavariate(liv, liv) * 200
+        self.co2 = random.betavariate(liv, liv) * 200
+        self.water = random.betavariate(liv, liv) * 200
+        self.gravity = random.betavariate(liv, liv) * 20
+        self.air_density = random.betavariate(1.1, 1.6) * self.gravity * 10
 
 
     def add_building(self):
@@ -133,10 +144,10 @@ class planet_wizard(models.TransientModel):
 
         planet = self.env['terraform.planet'].create(new_planet)
 
-        for b in self.buildings:
+        for b in self.buildings_new:
             new_building = self.env['terraform.building'].create({
                 'planet': planet.id,
-                'name': b.id,
+                'name': b.name.id,
             })
 
         return {
