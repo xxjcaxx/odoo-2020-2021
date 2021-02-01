@@ -24,7 +24,9 @@
                             <field name="coordinates"/>
 
                              <field name="planets"/>
-                                 <button name="%(terraform.launch_planet_wizard)d" type="action" string="New Planet" class="oe_highlight" />
+                                 <button name="%(terraform.launch_planet_wizard)d"
+                                         type="action" string="New Planet"
+                                         class="oe_highlight" />
 
                         </group>
                     </sheet>

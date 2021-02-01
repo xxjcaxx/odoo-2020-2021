@@ -92,14 +92,18 @@
             <field name="model">res.partner</field>
               <field name="inherit_id" ref="base.view_partner_form"/>
              <field name="arch" type="xml">
+                 <field name="vat" position="after">
+                      <field name="is_player"/>
+                 </field>
+
                  <notebook position="inside">
-                     <page string="Player">
+                     <page string="Player" attrs="{'invisible':[('is_player', '=', False)]}">
                       <group string="Personal Data">
                             <field name="avatar" widget="image"/>
-                          <field name="is_player"/>
+
                             <field name="password"/>
                         </group>
-                        <notebook><page string="Planets">
+                        <notebook><page string="Planets" >
                             <field name="planets" context="{'default_player':active_id}">
                                 <kanban>
                                     <!--list of field to be loaded -->

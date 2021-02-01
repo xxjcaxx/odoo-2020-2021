@@ -281,6 +281,11 @@ class planet(models.Model):
                 'animals': p.animals - p.animals * 0.5
             })
 
+    def change_planets(self):
+        records = self.browse(self.env.context.get('active_ids'))
+        for p in records:
+            p.write({'water':100})
+
 
 class sun(models.Model):
     _name = 'terraform.sun'
@@ -335,6 +340,43 @@ class building(models.Model):
     def activate(self):
         for b in self:
             b.write({'activo': not b.activo})
+
+    def open_type(self):
+        for b in self:
+
+            return {
+                "type": "ir.actions.act_window",
+                "res_model": "terraform.building_type",
+                "views": [[False, "form"]],
+                "res_id": b.name.id,
+                "target": "new"
+            }
+
+    def open_player(self):
+         for b in self:
+             if b.planet.player:
+              return {
+                    "type": "ir.actions.act_window",
+                    "res_model": "res.partner",
+                    "views": [[self.env.ref('terraform.player_form').id, "form"]],
+                    "res_id": b.planet.player.id,
+                    "target": "new"
+               }
+
+    def openurl(self):
+            for b in self:
+                return {
+                    "type": "ir.actions.act_url",
+                    "url": "http://odoo.com",
+                    "target": "self"
+                }
+
+    def open_b_type(self):
+        for b in self:
+            action = self.env.ref('terraform.new_building_type_action_window').read()[0]
+            action['res_id'] = b.name.id
+            action['views'] = [[False,'form']]
+            return action
 
 
 class building_type(models.Model):
@@ -421,8 +463,8 @@ class travel_wizard(models.TransientModel):
         return self.env['res.partner'].browse(self._context.get('active_id'))  # El context conté, entre altre coses,
         # el active_id del model que està obert.
     player = fields.Many2one('res.partner', required=True, default=_default_player , domain="[('is_player', '=', True)]")
-    origin_planet = fields.Many2one('terraform.planet', ondelete='cascade', required=True)
-    destiny_planet = fields.Many2one('terraform.planet', ondelete='cascade', required=True)
+    origin_planet = fields.Many2one('terraform.planet', required=True)
+    destiny_planet = fields.Many2one('terraform.planet', required=True)
     distance = fields.Float(compute='_get_distance')  # Distancia en temps
 
     @api.onchange('player')

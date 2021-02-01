@@ -242,6 +242,17 @@
         <menuitem name="Planets" id="terraform.menu_planets" parent="terraform.menu_1"
                   action="terraform.planet_action_window"/>
 
+<record model="ir.actions.server" id="terraform.change_planets_action">
+    <field name="name">Change Planets Server Action</field>
+    <field name="model_id" ref="model_terraform_planet"/>
+    <field name="binding_model_id" ref="model_terraform_planet"/>
+    <field name="state">code</field>
+    <field name="code">
+        action=model.change_planets()
+    </field>
+</record>
+
+
 
     </data>
 </odoo>

@@ -4,6 +4,7 @@ access_terraform_sun,terraform.sun,model_terraform_sun,base.group_user,1,1,1,1
 access_terraform_settings,terraform.settings,model_terraform_settings,base.group_user,1,1,1,1
 access_terraform_template,terraform.template,model_terraform_template,base.group_user,1,1,1,1
 access_terraform_building,terraform.building,model_terraform_building,base.group_user,1,1,1,1
+access_terraform_advanced_building,terraform.advanced_building,model_terraform_advanced_building,base.group_user,1,1,1,1
 access_terraform_building_type,terraform.building_type,model_terraform_building_type,base.group_user,1,1,1,1
 access_terraform_travel,terraform.travel,model_terraform_travel,base.group_user,1,1,1,1
 access_terraform_construction,terraform.construction,model_terraform_construction,base.group_user,1,1,1,1

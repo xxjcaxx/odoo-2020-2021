@@ -11,6 +11,29 @@
                     <sheet>
                         <field name="image" widget="image"/>
                         <field name="images_template"/>
+                        <field name="kanban_images_template">
+                            <kanban>
+                                <!--list of field to be loaded -->
+                                <field name="name" />
+                                <field name="image" />
+                                <field name="template" />
+                                <field name="id" /> <!-- És important afegir el id per al record.id.value -->
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div style="-webkit-box-flex: 0; flex: none; width: 100px; min-width:100px; margin: 0px; border: 1px solid #aaa;">
+                                            <div >
+                                               <a type="object"  name="add"  context="{'planet_wizard':parent.id}">
+                                                    <img class="o_image_64_contain"
+                                                         t-att-alt="record.name.value"
+                                                         t-att-src="kanban_image('terraform.template', 'image', record.template.raw_value)" />
+                                                </a>
+
+                                            </div>
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                                 </field>
                         <group string="Global Data">
                             <group states="global">
                                 <field name="name"/>

@@ -46,6 +46,13 @@ class planet_wizard(models.TransientModel):
                              default='global'
                              )
     images_template = fields.Many2one('terraform.template')
+    kanban_images_template = fields.Many2many('terraform.template_wizard',compute='_get_kanban_images')
+
+    @api.depends('sun')
+    def _get_kanban_images(self):
+        self.kanban_images_template = self.env['terraform.template'].search([]).mapped(
+            lambda  t: self.env['terraform.template_wizard'].create({'template':t.id})
+        )
 
     @api.depends('sun')
     def get_n_planet(self):
@@ -124,42 +131,55 @@ class planet_wizard(models.TransientModel):
                 'target': 'new',  # Si ho fem en current, canvia la finestra actual.
             }
 
-    def create_planet(self):
-        new_planet = {}
-        new_planet['name'] = self.name
-        new_planet['player'] = self.player.id
-        new_planet['image'] = self.image
-        new_planet['n_planet'] = self.n_planet
-        new_planet['sun'] = self.sun.id
-        new_planet['average_temperature'] = self.average_temperature
-        new_planet['oxigen'] = self.oxigen
-        new_planet['co2'] = self.co2
-        new_planet['water'] = self.water
-        new_planet['gravity'] = self.gravity
-        new_planet['air_density'] = self.air_density
-        new_planet['energy'] = self.energy
+    def create_planet(self):  # Falta no crear si no fiques algo
+        if self.image:
+            new_planet = {}
+            new_planet['name'] = self.name
+            new_planet['player'] = self.player.id
+            new_planet['image'] = self.image
+            new_planet['n_planet'] = self.n_planet
+            new_planet['sun'] = self.sun.id
+            new_planet['average_temperature'] = self.average_temperature
+            new_planet['oxigen'] = self.oxigen
+            new_planet['co2'] = self.co2
+            new_planet['water'] = self.water
+            new_planet['gravity'] = self.gravity
+            new_planet['air_density'] = self.air_density
+            new_planet['energy'] = self.energy
 
-        plants = fields.Float(default=0)  # Percentatge de superficie del planeta en plantes
-        animals = fields.Float(default=0)
+            plants = fields.Float(default=0)  # Percentatge de superficie del planeta en plantes
+            animals = fields.Float(default=0)
 
-        planet = self.env['terraform.planet'].create(new_planet)
+            planet = self.env['terraform.planet'].create(new_planet)
 
-        for b in self.buildings_new:
-            new_building = self.env['terraform.building'].create({
-                'planet': planet.id,
-                'name': b.name.id,
-            })
+            for b in self.buildings_new:
+                new_building = self.env['terraform.building'].create({
+                    'planet': planet.id,
+                    'name': b.name.id,
+                })
 
-        return {
-            'name': 'New Planet',
-            'view_type': 'form',
-            'view_mode': 'form',
-            'res_model': 'terraform.planet',
-            'res_id': planet.id,
-            'context': self._context,
-            'type': 'ir.actions.act_window',
-            'target': 'current',
-                 }
+            return {
+                'name': 'New Planet',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_model': 'terraform.planet',
+                'res_id': planet.id,
+                'context': self._context,
+                'type': 'ir.actions.act_window',
+                'target': 'current',
+                     }
+        else:
+            return {
+                'name': "Planet Wizard",
+                'view_type': 'form',
+                'view_mode': 'form',  # Pot ser form, tree, kanban...
+                'res_model': 'terraform.planet_wizard',  # El model de destí
+                'res_id': self.id,  # El id concret per obrir el form
+                # 'view_id': self.ref('wizards.reserves_form') # Opcional si hi ha més d'una vista posible.
+                'context': self._context,  # El context es pot ampliar per afegir opcions
+                'type': 'ir.actions.act_window',
+                'target': 'new',  # Si ho fem en current, canvia la finestra actual.
+            }
 
 
 class building_wizard(models.TransientModel):
@@ -184,6 +204,30 @@ class building_type_wizard(models.TransientModel):
                     'view_mode': 'form',  # Pot ser form, tree, kanban...
                     'res_model': 'terraform.planet_wizard',  # El model de destí
                     'res_id': planet_wizard,  # El id concret per obrir el form
+                    # 'view_id': self.ref('wizards.reserves_form') # Opcional si hi ha més d'una vista posible.
+                    'context': self._context,  # El context es pot ampliar per afegir opcions
+                    'type': 'ir.actions.act_window',
+                    'target': 'new',  # Si ho fem en current, canvia la finestra actual.
+                }
+
+
+class template_wizard(models.TransientModel):
+    _name = 'terraform.template_wizard'
+
+    template = fields.Many2one('terraform.template')
+    name = fields.Char(related='template.name')
+    image = fields.Image(related='template.image')
+
+    def add(self):
+        planet_wizard = self.env.context.get('planet_wizard')
+        planet_wizard = self.env['terraform.planet_wizard'].browse(planet_wizard)
+        planet_wizard.write({'image':self.template.image})
+        return {
+                    'name': "Planet Wizard",
+                    'view_type': 'form',
+                    'view_mode': 'form',  # Pot ser form, tree, kanban...
+                    'res_model': 'terraform.planet_wizard',  # El model de destí
+                    'res_id': planet_wizard.id,  # El id concret per obrir el form
                     # 'view_id': self.ref('wizards.reserves_form') # Opcional si hi ha més d'una vista posible.
                     'context': self._context,  # El context es pot ampliar per afegir opcions
                     'type': 'ir.actions.act_window',
