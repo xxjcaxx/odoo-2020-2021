@@ -117,6 +117,7 @@ class planet(models.Model):
             if p.player:
                 planetary_changes = p.env['terraform.planetary_changes'].create(
                     {'planet': p.id, 'time': date, 'name': p.name + " " + str(date)})
+
                 # Si te jugador, el planeta comença a tindre efecte hivernacle i altres coses
                 if p.co2 > 50:  # Efecte hivernacle
                     greenhouse = math.pow((p.co2 * (10 - p.n_planet)), 1.1) * 0.00001
@@ -200,6 +201,22 @@ class planet(models.Model):
                     'dead_animals_temperature': death_animals_t,
                     'dead_plants_temperature': death_plants_t,
                 })
+                planetary_changes2 = p.env['terraform.planetary_changes2'].create(
+                    {'planet': p.id, 'time': date, 'name': p.name + " " + str(date)})
+                planetary_changes2.write({
+                    'change': 'emission',
+                    'value': emission})
+                planetary_changes2 = p.env['terraform.planetary_changes2'].create(
+                    {'planet': p.id, 'time': date, 'name': p.name + " " + str(date)})
+                planetary_changes2.write({
+                    'change': 'greenhouse',
+                    'value': greenhouse})
+                planetary_changes2 = p.env['terraform.planetary_changes2'].create(
+                    {'planet': p.id, 'time': date, 'name': p.name + " " + str(date)})
+                planetary_changes2.write({
+                    'change': 'average_temperature',
+                    'value': final_temperature})
+
 
                 ########### Desastres naturals
                 if p.plants > 20 and p.water < 20 and p.oxigen > 90:  # possibles incendis masius
@@ -563,6 +580,15 @@ class planetary_changes(models.Model):
     dead_plants_temperature = fields.Float(digits=(12, 4))
     new_plants = fields.Float(digits=(12, 4))
 
+class planetary_changes2(models.Model):
+    _name = 'terraform.planetary_changes2'
+    _description = 'Changes in planet over the time'
+
+    name = fields.Char()
+    planet = fields.Many2one('terraform.planet', ondelete='cascade', required=True)
+    time = fields.Char()
+    change = fields.Selection([('greenhouse', 'greenhouse'), ('emission', 'emission'), ('average_temperature', 'average_temperature')])
+    value = fields.Float()
 
 class natural_disaster(models.Model):
     _name = 'terraform.disaster'

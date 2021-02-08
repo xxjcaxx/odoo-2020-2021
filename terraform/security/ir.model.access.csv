@@ -9,6 +9,7 @@ access_terraform_building_type,terraform.building_type,model_terraform_building_
 access_terraform_travel,terraform.travel,model_terraform_travel,base.group_user,1,1,1,1
 access_terraform_construction,terraform.construction,model_terraform_construction,base.group_user,1,1,1,1
 access_terraform_planetary_changes,terraform.planetary_changes,model_terraform_planetary_changes,base.group_user,1,1,1,1
+access_terraform_planetary_changes2,terraform.planetary_changes2,model_terraform_planetary_changes2,base.group_user,1,1,1,1
 access_terraform_disaster,terraform.disaster,model_terraform_disaster,base.group_user,1,1,1,1
 access_terraform_challenge,terraform.challenge,model_terraform_challenge,base.group_user,1,1,1,1
 access_terraform_satelit,terraform.satelit,model_terraform_satelit,base.group_user,1,1,1,1
