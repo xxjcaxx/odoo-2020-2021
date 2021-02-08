@@ -2,22 +2,22 @@
     <data>
 
 
-    <record model="ir.ui.view" id="terraform.planet_changes_graph">
-      <field name="name">Planet Changes graph</field>
-      <field name="model">terraform.planetary_changes</field>
-      <field name="arch" type="xml">
-        <graph string="Changes History" type="line">
-          <field name="time"  type="row"/>
-            <field name="planet"  type="col"/>
-          <field name="greenhouse" type="measure"/>
-            <field name="co2" type="measure"/>
-        </graph>
+        <record model="ir.ui.view" id="terraform.planet_changes_graph">
+            <field name="name">Planet Changes graph</field>
+            <field name="model">terraform.planetary_changes</field>
+            <field name="arch" type="xml">
+                <graph string="Changes History" type="line">
+                    <field name="time"  type="row"/>
+                    <field name="planet"  type="col"/>
+                    <field name="greenhouse" type="measure"/>
+                    <field name="co2" type="measure"/>
+                </graph>
 
-      </field>
-    </record>
+            </field>
+        </record>
 
 
-                <act_window id="terraform.launch_planet_changes_graph"
+        <act_window id="terraform.launch_planet_changes_graph"
                     name="Launch Planet Changes graph"
                     res_model="terraform.planetary_changes"
                     view_mode="graph"
@@ -25,21 +25,19 @@
                     domain="[('planet','=',active_id)]"
         />
 
+        <record model="ir.ui.view" id="terraform.planet_changes2_graph">
+            <field name="name">Planet Changes graph</field>
+            <field name="model">terraform.planetary_changes2</field>
+            <field name="arch" type="xml">
+                <graph string="Changes History" type="line">
+                    <field name="time"  type="row"/>
+                    <field name="change"  type="col"/>
+                    <field name="value" type="measure"/>
+                </graph>
+            </field>
+        </record>
 
-            <record model="ir.ui.view" id="terraform.planet_changes2_graph">
-      <field name="name">Planet Changes graph</field>
-      <field name="model">terraform.planetary_changes2</field>
-      <field name="arch" type="xml">
-        <graph string="Changes History" type="line">
-          <field name="time"  type="row"/>
-            <field name="change"  type="col"/>
-          <field name="value" type="measure"/>
-        </graph>
-
-      </field>
-    </record>
-
- <act_window id="terraform.launch_planet_changes2_graph"
+        <act_window id="terraform.launch_planet_changes2_graph"
                     name="Launch Planet Changes2 graph"
                     res_model="terraform.planetary_changes2"
                     view_mode="graph"
@@ -59,7 +57,7 @@
                     <field name="n_planet"/>
                     <field name="sun"/>
                     <field name="average_temperature"/>
-                     <field name="temperature_status" />
+                    <field name="temperature_status" />
                     <field name="oxigen"/>
                     <field name="co2"/>
                     <field name="water"/>
@@ -78,20 +76,20 @@
             <field name="arch" type="xml">
                 <form string="Planet">
                     <header>
-                            <field name="temperature_status" widget="statusbar"/>
-                        </header>
-                       <header>
+                        <field name="temperature_status" widget="statusbar"/>
+                    </header>
+                    <header>
                         <field name="oxigen_status" widget="statusbar"/>
-                        </header>
-                       <header>
-                         <field name="co2_status" widget="statusbar"/>
-                        </header>
+                    </header>
+                    <header>
+                        <field name="co2_status" widget="statusbar"/>
+                    </header>
                     <sheet>
                         <field name="image" widget="image"/>
                         <group string="Global Data">
                             <group>
                                 <field name="name"/>
-                                <field name="player"/>
+                                <field name="player" domain="[('is_player','=',True)]"/>
                                 <field name="n_planet"/>
                                 <separator string="Description"/>
                                 <field name="sun"/>
@@ -164,12 +162,12 @@
                                     </tree>
                                 </field>
 
-                                 <button name="%(terraform.launch_planet_changes_graph)d" type="action" string="Show Graph"
+                                <button name="%(terraform.launch_planet_changes_graph)d" type="action" string="Show Graph"
                                         class="oe_highlight" ></button>
                                 <button name="%(terraform.launch_planet_changes2_graph)d" type="action" string="Show Graph 2"
                                         class="oe_highlight" ></button>
                             </page>
-                               <page string="Disasters">
+                            <page string="Disasters">
                                 <field name="disasters">
                                     <tree limit="10">
                                         <field name="name"/>
@@ -186,7 +184,7 @@
                         </notebook>
                         <footer>
                             <button name="calculate_production" type="object" string="Calculate Production" class="oe_highlight" />
-                             <button name="asteroid_collision" type="object" string="Asteroid Collision" class="oe_highlight" />
+                            <button name="asteroid_collision" type="object" string="Asteroid Collision" class="oe_highlight" />
                         </footer>
                     </sheet>
                 </form>
@@ -268,15 +266,15 @@
         <menuitem name="Planets" id="terraform.menu_planets" parent="terraform.menu_1"
                   action="terraform.planet_action_window"/>
 
-<record model="ir.actions.server" id="terraform.change_planets_action">
-    <field name="name">Change Planets Server Action</field>
-    <field name="model_id" ref="model_terraform_planet"/>
-    <field name="binding_model_id" ref="model_terraform_planet"/>
-    <field name="state">code</field>
-    <field name="code">
-        action=model.change_planets()
-    </field>
-</record>
+        <record model="ir.actions.server" id="terraform.change_planets_action">
+            <field name="name">Change Planets Server Action</field>
+            <field name="model_id" ref="model_terraform_planet"/>
+            <field name="binding_model_id" ref="model_terraform_planet"/>
+            <field name="state">code</field>
+            <field name="code">
+                action=model.change_planets()
+            </field>
+        </record>
 
 
 

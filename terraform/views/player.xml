@@ -179,7 +179,6 @@
             (0, 0, {'view_mode': 'tree', 'view_id': ref('terraform.player_tree')}),
             (0, 0, {'view_mode': 'form', 'view_id': ref('terraform.player_form')}),]" />
         </record>
-
         <!-- Menu -->
 
         <menuitem name="Players" id="terraform.menu_players" parent="terraform.menu_1"
