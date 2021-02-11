@@ -40,10 +40,15 @@ class Terraform(http.Controller):
     # Per a login
      @http.route('/terraform/terraform/login', auth='public', cors='*', type='json')
      def terraform_model(self, user, password, **kw):
-        passs = http.request.env['terraform.player'].sudo().search([('name','=',user)]).mapped(lambda p: p.password)
-        if passs[0] == password:
-            return {"login":"si"}
+        passs = http.request.env['res.partner'].sudo().search([('name','=',user)])
+        if(passs):
+            if passs[0].password == password:
+                return {"login":"si", "id": passs[0].id}
+            else:
+                print('no pass')
+                return {"login": "no"}
         else:
+            print('no user')
             return {"login":"no"}
 
     # Per a crear coses
@@ -58,6 +63,12 @@ class Terraform(http.Controller):
         new_id = http.request.env[model].sudo().create(data)
         return new_id.read()[0]
 
+     @http.route('/terraform/session/authenticate', auth="none", cors='*', csrf=False, type='json')
+     def authenticate(self, db, login, password, base_location=None):
+          print(db,login,password)
+          http.request.session.authenticate(db, login, password)
+          print(http.request.env['ir.http'].session_info())
+          return http.request.env['ir.http'].session_info()
 
     ### per a players passant el id:
      # @http.route('/terraform/terraform/players/<model("terraform.player"):obj>/', auth='public',cors='*')
@@ -93,12 +104,6 @@ class Terraform(http.Controller):
      #     planet = http.request.env['terraform.planet'].sudo().search([('id','=',obj.id)]).mapped(lambda p: p.read()[0])
      #     return planet
 
-     # @http.route('/terraform/session/authenticate', auth="none", cors='*', csrf=False, type='json')
-     # def authenticate(self, db, login, password, base_location=None):
-     #    # print(db,login,password)
-     #     http.request.session.authenticate(db, login, password)
-     #     print(http.request.env['ir.http'].session_info())
-     #     return http.request.env['ir.http'].session_info()
 
 # https://www.odoo.com/es_ES/forum/ayuda-1/question/avoid-cors-error-webapp-cordova-99048
 # https://stackoverflow.com/questions/61519072/how-do-i-do-post-get-request-from-ajax-to-odoo-10-custom-module-controller-blo
