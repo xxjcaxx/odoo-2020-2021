@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import http
 import json
+from pprint import pprint
 
 class Terraform(http.Controller):
 
@@ -51,7 +52,7 @@ class Terraform(http.Controller):
             print('no user')
             return {"login":"no"}
 
-    # Per a crear coses
+    # Per a crear coses sense API REST
      @http.route('/terraform/terraform/create/travel', auth='public', cors='*', type='json')
      def terraform_model_create(self, p1, p2, player, **kw):
         travel = http.request.env['terraform.travel'].sudo().create({'origin_planet':p1, 'destiny_planet': p2, 'player':player})
@@ -69,6 +70,46 @@ class Terraform(http.Controller):
           http.request.session.authenticate(db, login, password)
           print(http.request.env['ir.http'].session_info())
           return http.request.env['ir.http'].session_info()
+
+########################### INFORMACIÓ #############################
+     @http.route('/terraform/info', auth="none", cors='*', csrf=False, type='json')
+     def info(self, user,  password, base_location=None):
+       print('infoooooooooooooooooooooooooooooooooooo')
+       print(http.request.httprequest.__dict__)
+       pprint(http.request.httprequest)
+       #help(http.request.httprequest)
+       print(http.request.httprequest.method)
+       print(http.request.params)
+       return http.request.env['ir.http'].session_info()
+
+
+
+
+################################### API REST ##############################3
+     @http.route('/terraform/api/<model>', auth="none", cors='*', csrf=False, type='json')
+     def api(self, **args):
+       print('APIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII')
+       print(args, http.request.httprequest.method)
+       model = args['model']
+       if( http.request.httprequest.method == 'POST'):   #  {"jsonrpc":"2.0","method":"call","params":{"planet":{"name":"Trantor","average_temperature":20},"password":"1234"}}
+           record = http.request.env['terraform.'+model].sudo().create(args[model])
+           return record.read()
+       if( http.request.httprequest.method == 'GET'):
+           record = http.request.env['terraform.'+model].sudo().search([('id','=',args[model]['id'])])
+           return record.read()
+       if( http.request.httprequest.method == 'PUT' or  http.request.httprequest.method == 'PATCH'):
+           record = http.request.env['terraform.'+model].sudo().search([('id','=',args[model]['id'])])[0]
+           record.write(args[model])
+           return record.read()
+       if(http.request.httprequest.method == 'DELETE'):
+           record = http.request.env['terraform.'+model].sudo().search([('id','=',args[model]['id'])])[0]
+           print(record)
+           record.unlink()
+           return record.read()
+
+       return http.request.env['ir.http'].session_info()
+
+
 
     ### per a players passant el id:
      # @http.route('/terraform/terraform/players/<model("terraform.player"):obj>/', auth='public',cors='*')
