@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_simulator_simulator,simulator.simulator,model_simulator_simulator,base.group_user,1,1,1,1

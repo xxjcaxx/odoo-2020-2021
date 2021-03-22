@@ -86,29 +86,56 @@ class Terraform(http.Controller):
 
 
 ################################### API REST ##############################3
-     @http.route('/terraform/api/<model>', auth="none", cors='*', csrf=False, type='json')
+     @http.route('/terraform/api/<model>', auth="none", cors='*', methods=["POST","PUT","OPTIONS"], csrf=False, type='json')
      def api(self, **args):
-       print('APIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII')
+       print('APIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIPOST')
        print(args, http.request.httprequest.method)
        model = args['model']
        if( http.request.httprequest.method == 'POST'):   #  {"jsonrpc":"2.0","method":"call","params":{"planet":{"name":"Trantor","average_temperature":20},"password":"1234"}}
            record = http.request.env['terraform.'+model].sudo().create(args[model])
            return record.read()
-       if( http.request.httprequest.method == 'GET'):
-           record = http.request.env['terraform.'+model].sudo().search([('id','=',args[model]['id'])])
-           return record.read()
        if( http.request.httprequest.method == 'PUT' or  http.request.httprequest.method == 'PATCH'):
            record = http.request.env['terraform.'+model].sudo().search([('id','=',args[model]['id'])])[0]
            record.write(args[model])
            return record.read()
-       if(http.request.httprequest.method == 'DELETE'):
-           record = http.request.env['terraform.'+model].sudo().search([('id','=',args[model]['id'])])[0]
-           print(record)
-           record.unlink()
-           return record.read()
-
        return http.request.env['ir.http'].session_info()
 
+
+     @http.route('/terraform/api/<model>', auth="none", cors='*', methods=["GET","DELETE"], csrf=False, type='http')
+     def api(self, **args):
+        print('APIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIGET')
+        print(args, http.request.httprequest.method)
+        model = args['model']
+        if (http.request.httprequest.method == 'GET'):
+            record = http.request.env['terraform.' + model].sudo().search([])
+            print(record.read())
+            return http.Response(
+            json.dumps(record.read()),
+            status=200,
+            mimetype='application/json'
+           )
+        if (http.request.httprequest.method == 'DELETE'):
+            record = http.request.env['terraform.' + model].sudo().search([('id', '=', args[model]['id'])])[0]
+            print(record)
+            record.unlink()
+            return http.Response(
+                json.dumps(record.read()),
+                status=200,
+                mimetype='application/json'
+            )
+
+        return http.request.env['ir.http'].session_info()
+
+     @http.route('/terraform/sun', auth='public',cors='*', type='json')
+     def terraform_field(self, **kw):
+         model = http.request.env['terraform.sun'].sudo().search([])
+         ht = http.Response(
+                json.dumps({'a':3}),
+                status=200,
+                mimetype='application/json'
+            )
+         print(ht)
+         return model.read()
 
 
     ### per a players passant el id:
